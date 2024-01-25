@@ -2,10 +2,10 @@ const fs = require("fs");
 
 class ProductManager {
 
-    constructor() {
+    constructor(path) {
         this.products = [];
         this.idCounter = 1;
-        this.path = "./src/listaProductos.json";
+        this.path = path;
     }
 
     addProduct(name, desc, price, img, code, stock) {
@@ -65,7 +65,12 @@ class ProductManager {
     getProductById = async (id) => {
         const data = await this.getProducts();
         const product = data.find(prod => prod.id == id);
-        return product || `El producto con la ID ${id} no existe`;
+
+        if (!product) {
+            throw new Error(`El producto con la ID ${id} no existe`);
+        }
+
+        return product;
     }
 
     updateProduct(id, updatedValues) {
@@ -104,8 +109,8 @@ class ProductManager {
         }
     }
 }
-
-const manager = new ProductManager();
+/*
+const manager = new ProductManager("./src/output/listaProductos.json");
 
 // Agregar productos
 manager.addProduct('Pava Electrica', 'una pava que hierve el agua en solo 2 minutos', 10000, "Imagen no Disponible", "abc123", 25)
@@ -118,39 +123,5 @@ manager.addProduct('Linterna', 'linterna de hogar estandar', 5000, "Imagen no Di
 manager.addProduct('Linterna marca X', 'linterna de la marca X', 9500, "Imagen no Disponible", "bji141", 25)
 manager.addProduct('Teclado marca Z', 'teclado de la marca Z', 13500, "Imagen no Disponible", "vhu151", 3)
 manager.addProduct('Celular marca X', 'celular de la marca z', 155000, "Imagen no Disponible", "cgy161", 7)
-
-module.exports = ProductManager;
-
-/*
-// Ejemplo de un Producto con insuficientes datos
-manager.addProduct('Mouse', 'mouse estandar', 7000, "Imagen no Disponible")
-
-// Ejemplo de un Producto repetido
-manager.addProduct('Pava Electrica', 'una pava que hierve el agua en solo 2 minutos', 10000, "Imagen no Disponible", "abc123", 25)
-
-// Buscar producto a traves de su ID
-let findProductId = 2; 
-let findProduct = manager.getProductById(findProductId);
-
-if (findProduct) {
-    console.log("Producto encontrado:", findProduct);
-} else {
-    console.error(`Error, no existe un producto con la ID ${findProductId}.\n`);
-}
-
-// Actualizar producto usando su ID
-manager.updateProduct(2, {
-    price: 120000,
-    stock: 7,
-});
-
-manager.updateProduct(3, {
-    name: "Teclado marca X",
-    desc: "Teclado premium de la marca X",
-    price: 12000,
-    stock: 20,
-});
-
-// Borrar un producto a traves de su ID
-manager.deleteProduct(1);
 */
+module.exports = ProductManager;

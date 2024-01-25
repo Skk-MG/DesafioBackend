@@ -6,7 +6,7 @@ const port = 8080;
 
 server.use(express.urlencoded({extended:true}));
 
-const manager = new ProductManager("./src/listaProductos.json");
+const manager = new ProductManager("./src/output/listaProductos.json");
 
 server.get('/products', async (req, res) => {
 
