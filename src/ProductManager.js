@@ -35,19 +35,19 @@ class ProductManager {
         }
     }
 
-    writeProductList() {
+    async writeProductList() {
 
         const data = JSON.stringify(this.products, null, 2);
 
         try {
-            fs.writeFileSync(this.path, data);
+            await fs.promises.writeFile(this.path, data);
             console.log(`Lista de productos escrita en ${this.path}`);
         } catch (error) {
             console.error("Error al escribir el archivo:", error);
         }
     }
 
-    getProducts = async () => {
+    async getProducts() {
         try {
             const fileContent = await fs.promises.readFile(this.path, 'utf-8');
             const data = JSON.parse(fileContent);
@@ -62,7 +62,7 @@ class ProductManager {
         }
     }
     
-    getProductById = async (id) => {
+    async getProductById(id) {
         const data = await this.getProducts();
         const product = data.find(prod => prod.id == id);
 
@@ -109,19 +109,5 @@ class ProductManager {
         }
     }
 }
-/*
-const manager = new ProductManager("./src/output/listaProductos.json");
 
-// Agregar productos
-manager.addProduct('Pava Electrica', 'una pava que hierve el agua en solo 2 minutos', 10000, "Imagen no Disponible", "abc123", 25)
-manager.addProduct('Celular', 'celular de gama media', 100000, "Imagen no Disponible", "fgh456", 10)
-manager.addProduct('Teclado', 'teclado QWERTY estandar', 8000, "Imagen no Disponible", "jkl789", 35)
-manager.addProduct('Teclado marca X', 'teclado de la marca X', 18000, "Imagen no Disponible", "zxc101", 20)
-manager.addProduct('Celular marca X', 'celular de la marca X', 58000, "Imagen no Disponible", "vbn111", 5)
-manager.addProduct('Pava Electrica marca X', 'pava electrica de la marca X', 18000, "Imagen no Disponible", "mlp121", 9)
-manager.addProduct('Linterna', 'linterna de hogar estandar', 5000, "Imagen no Disponible", "nko131", 50)
-manager.addProduct('Linterna marca X', 'linterna de la marca X', 9500, "Imagen no Disponible", "bji141", 25)
-manager.addProduct('Teclado marca Z', 'teclado de la marca Z', 13500, "Imagen no Disponible", "vhu151", 3)
-manager.addProduct('Celular marca X', 'celular de la marca z', 155000, "Imagen no Disponible", "cgy161", 7)
-*/
 module.exports = ProductManager;
