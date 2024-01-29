@@ -3,90 +3,121 @@
     "name": "Pava Electrica",
     "desc": "una pava que hierve el agua en solo 2 minutos",
     "price": 10000,
-    "img": "Imagen no Disponible",
-    "id": 1,
+    "thumbnail": "Imagen no Disponible",
     "code": "abc123",
-    "stock": 25
+    "stock": 25,
+    "status": true,
+    "category": "stuff",
+    "id": 1
   },
   {
     "name": "Celular",
     "desc": "celular de gama media",
     "price": 100000,
-    "img": "Imagen no Disponible",
-    "id": 2,
+    "thumbnail": "Imagen no Disponible",
     "code": "fgh456",
-    "stock": 10
+    "stock": 10,
+    "status": true,
+    "category": "stuff",
+    "id": 2
   },
   {
     "name": "Teclado",
     "desc": "teclado QWERTY estandar",
     "price": 8000,
-    "img": "Imagen no Disponible",
-    "id": 3,
+    "thumbnail": "Imagen no Disponible",
     "code": "jkl789",
-    "stock": 35
+    "stock": 35,
+    "status": true,
+    "category": "stuff",
+    "id": 3
   },
   {
     "name": "Teclado marca X",
     "desc": "teclado de la marca X",
     "price": 18000,
-    "img": "Imagen no Disponible",
-    "id": 4,
+    "thumbnail": "Imagen no Disponible",
     "code": "zxc101",
-    "stock": 20
+    "stock": 20,
+    "status": true,
+    "category": "stuff",
+    "id": 4
   },
   {
     "name": "Celular marca X",
     "desc": "celular de la marca X",
     "price": 58000,
-    "img": "Imagen no Disponible",
-    "id": 5,
+    "thumbnail": "Imagen no Disponible",
     "code": "vbn111",
-    "stock": 5
+    "stock": 5,
+    "status": true,
+    "category": "stuff",
+    "id": 5
   },
   {
     "name": "Pava Electrica marca X",
     "desc": "pava electrica de la marca X",
     "price": 18000,
-    "img": "Imagen no Disponible",
-    "id": 6,
+    "thumbnail": "Imagen no Disponible",
     "code": "mlp121",
-    "stock": 9
+    "stock": 9,
+    "status": true,
+    "category": "stuff",
+    "id": 6
   },
   {
     "name": "Linterna",
     "desc": "linterna de hogar estandar",
     "price": 5000,
-    "img": "Imagen no Disponible",
-    "id": 7,
+    "thumbnail": "Imagen no Disponible",
     "code": "nko131",
-    "stock": 50
+    "stock": 50,
+    "status": true,
+    "category": "stuff",
+    "id": 7
   },
   {
     "name": "Linterna marca X",
     "desc": "linterna de la marca X",
     "price": 9500,
-    "img": "Imagen no Disponible",
-    "id": 8,
+    "thumbnail": "Imagen no Disponible",
     "code": "bji141",
-    "stock": 25
+    "stock": 25,
+    "status": true,
+    "category": "stuff",
+    "id": 8
   },
   {
     "name": "Teclado marca Z",
     "desc": "teclado de la marca Z",
     "price": 13500,
-    "img": "Imagen no Disponible",
-    "id": 9,
+    "thumbnail": "Imagen no Disponible",
     "code": "vhu151",
-    "stock": 3
+    "stock": 3,
+    "status": true,
+    "category": "stuff",
+    "id": 9
   },
   {
     "name": "Celular marca X",
     "desc": "celular de la marca z",
     "price": 155000,
-    "img": "Imagen no Disponible",
-    "id": 10,
+    "thumbnail": "Imagen no Disponible",
     "code": "cgy161",
-    "stock": 7
+    "stock": 7,
+    "status": true,
+    "category": "stuff",
+    "id": 10
+  },
+  {
+    "name": "Nuevo Producto",
+    "desc": "producto de prueba postman",
+    "price": 123456,
+    "thumbnail": "Imagen no Disponible",
+    "code": "852lkj",
+    "stock": 11111,
+    "status": true,
+    "category": "stuff",
+    "id": 11
   }
 ]

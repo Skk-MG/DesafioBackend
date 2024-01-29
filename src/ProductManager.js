@@ -4,13 +4,15 @@ class ProductManager {
 
     constructor(path) {
         this.products = [];
-        this.idCounter = 1;
         this.path = path;
+        this.idCounter = 1; 
+
+        this.initializeIdCounter();
     }
 
-    addProduct(name, desc, price, img, code, stock) {
+    async addProduct(name, desc, price, thumbnail, code, stock, status, category) {
 
-        if (name && desc && price && img && code && stock) {
+        if (name && desc && price && thumbnail && code && stock && status && category) {
 
             const existingProduct = this.products.find(product => product.code === code);
 
@@ -21,10 +23,13 @@ class ProductManager {
                 product.name = name;
                 product.desc = desc;
                 product.price = price;
-                product.img = img;
-                product.id = this.idCounter;
+                product.thumbnail = thumbnail;
                 product.code = code;
                 product.stock = stock;
+                product.status = status;
+                product.category = category;
+                product.id = this.idCounter;
+
     
                 this.products.push(product)
                 this.idCounter += 1;
@@ -36,11 +41,15 @@ class ProductManager {
     }
 
     async writeProductList() {
-
-        const data = JSON.stringify(this.products, null, 2);
-
+    
         try {
-            await fs.promises.writeFile(this.path, data);
+            const existingData = await fs.promises.readFile(this.path, 'utf-8');
+            const existingProducts = JSON.parse(existingData);
+    
+            existingProducts.push(...this.products);
+    
+            await fs.promises.writeFile(this.path, JSON.stringify(existingProducts, null, 2));
+    
             console.log(`Lista de productos escrita en ${this.path}`);
         } catch (error) {
             console.error("Error al escribir el archivo:", error);
@@ -74,20 +83,19 @@ class ProductManager {
     }
 
     updateProduct(id, updatedValues) {
-        
         const index = this.products.findIndex(product => product.id === id);
-
+    
         if (index !== -1) {
             const updatedProduct = {
                 ...this.products[index],
-                ...updatedValues,       
-                id,                     
+                ...updatedValues,
+                id,
             };
-
+    
             this.products[index] = updatedProduct;
-
+    
             this.writeProductList();
-
+    
             console.log(`El producto con la ID ${id} ha sido actualizado exitosamente.\n`);
         } else {
             console.error(`Error, no se encontro ningun producto con la ID ${id}.\n`);
@@ -106,6 +114,19 @@ class ProductManager {
             console.log(`El producto con la ID ${id} fue eliminado exitosamente.\n`);
         } else {
             console.error(`Error, no se encontro ningun producto con la ID ${id}.\n`);
+        }
+    }
+
+    initializeIdCounter() {
+        try {
+            const fileContent = fs.readFileSync(this.path, 'utf-8');
+            const existingProducts = JSON.parse(fileContent);
+
+            const maxId = existingProducts.reduce((max, product) => Math.max(max, product.id), 0);
+
+            this.idCounter = maxId + 1;
+        } catch (error) {
+            console.error("Error al inicializar idCounter:", error);
         }
     }
 }
