@@ -23,6 +23,7 @@ router.get('/', async (req, res) => {
         }
     
         res.send(products);
+        
     } catch (error) {
         console.error("Error al retirar los productos:", error);
         res.status(500).send("Error interno del server");
@@ -40,20 +41,27 @@ router.get('/:pid', async (req, res) => {
     try {
         const product = await manager.getProductById(id);
         res.send(product);
+
     } catch (error) {
         res.status(404).send({ error: `No existe el id ${id}`});
     }
 });
 
 router.post('/', async (req, res) => {
+
     try {
-      const { name, desc, price, thumbnail, code, stock, status, category } = req.body;
+        const { name, desc, price, thumbnail, code, stock, status, category } = req.body;
   
-      const newProduct = await manager.addProduct(name, desc, price, thumbnail, code, stock, status, category);
+        if (!name || !desc || !price || !thumbnail || !code || !stock || !status || !category) {
+            return res.status(400).send({ error: 'Todos los campos son obligatorios.' });
+        }
+
+        const newProduct = await manager.addProduct(name, desc, price, thumbnail, code, stock, status, category);
   
-      res.send({ status: 'success', payload: newProduct });
+        res.send({ status: 'success', payload: newProduct });
+
     } catch (error) {
-      res.status(400).send({ error: error.message });
+        res.status(400).send({ error: error.message });
     }
   });
 

@@ -8,6 +8,34 @@ class ProductManager {
         this.idCounter = 1; 
 
         this.initializeIdCounter();
+        this.loadProductsFromFile();
+    }
+
+    loadProductsFromFile() {
+        try {
+            const fileContent = fs.readFileSync(this.path, 'utf-8');
+            this.products = JSON.parse(fileContent);
+            console.log(`Productos cargados desde ${this.path}`);
+        } catch (error) {
+            if (error.code === 'ENOENT') {
+                console.log("No existe el archivo o aun no ha sido creado");
+            } else {
+                console.error("Error al cargar el archivo:", error);
+            }
+        }
+    }
+
+    initializeIdCounter() {
+        try {
+            const fileContent = fs.readFileSync(this.path, 'utf-8');
+            const existingProducts = JSON.parse(fileContent);
+
+            const maxId = existingProducts.reduce((max, product) => Math.max(max, product.id), 0);
+
+            this.idCounter = maxId + 1;
+        } catch (error) {
+            console.error("Error al inicializar idCounter:", error);
+        }
     }
 
     async addProduct(name, desc, price, thumbnail, code, stock, status, category) {
@@ -41,14 +69,8 @@ class ProductManager {
     }
 
     async writeProductList() {
-    
         try {
-            const existingData = await fs.promises.readFile(this.path, 'utf-8');
-            const existingProducts = JSON.parse(existingData);
-    
-            existingProducts.push(...this.products);
-    
-            await fs.promises.writeFile(this.path, JSON.stringify(existingProducts, null, 2));
+            await fs.promises.writeFile(this.path, JSON.stringify(this.products, null, 2));
     
             console.log(`Lista de productos escrita en ${this.path}`);
         } catch (error) {
@@ -57,10 +79,12 @@ class ProductManager {
     }
 
     async getProducts() {
+
         try {
             const fileContent = await fs.promises.readFile(this.path, 'utf-8');
             const data = JSON.parse(fileContent);
             return data
+            
         } catch (error) {
             if (error.code === 'ENOENT') {
                 console.log("No existe el archivo o aun no ha sido creado");
@@ -114,19 +138,6 @@ class ProductManager {
             console.log(`El producto con la ID ${id} fue eliminado exitosamente.\n`);
         } else {
             console.error(`Error, no se encontro ningun producto con la ID ${id}.\n`);
-        }
-    }
-
-    initializeIdCounter() {
-        try {
-            const fileContent = fs.readFileSync(this.path, 'utf-8');
-            const existingProducts = JSON.parse(fileContent);
-
-            const maxId = existingProducts.reduce((max, product) => Math.max(max, product.id), 0);
-
-            this.idCounter = maxId + 1;
-        } catch (error) {
-            console.error("Error al inicializar idCounter:", error);
         }
     }
 }

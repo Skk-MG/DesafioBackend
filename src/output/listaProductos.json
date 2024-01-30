@@ -7,7 +7,7 @@
     "code": "abc123",
     "stock": 25,
     "status": true,
-    "category": "stuff",
+    "category": "pava",
     "id": 1
   },
   {
@@ -18,7 +18,7 @@
     "code": "fgh456",
     "stock": 10,
     "status": true,
-    "category": "stuff",
+    "category": "celular",
     "id": 2
   },
   {
@@ -29,7 +29,7 @@
     "code": "jkl789",
     "stock": 35,
     "status": true,
-    "category": "stuff",
+    "category": "teclado",
     "id": 3
   },
   {
@@ -40,7 +40,7 @@
     "code": "zxc101",
     "stock": 20,
     "status": true,
-    "category": "stuff",
+    "category": "teclado",
     "id": 4
   },
   {
@@ -51,7 +51,7 @@
     "code": "vbn111",
     "stock": 5,
     "status": true,
-    "category": "stuff",
+    "category": "celular",
     "id": 5
   },
   {
@@ -62,7 +62,7 @@
     "code": "mlp121",
     "stock": 9,
     "status": true,
-    "category": "stuff",
+    "category": "pava",
     "id": 6
   },
   {
@@ -73,7 +73,7 @@
     "code": "nko131",
     "stock": 50,
     "status": true,
-    "category": "stuff",
+    "category": "linterna",
     "id": 7
   },
   {
@@ -84,7 +84,7 @@
     "code": "bji141",
     "stock": 25,
     "status": true,
-    "category": "stuff",
+    "category": "linterna",
     "id": 8
   },
   {
@@ -95,7 +95,7 @@
     "code": "vhu151",
     "stock": 3,
     "status": true,
-    "category": "stuff",
+    "category": "teclado",
     "id": 9
   },
   {
@@ -106,18 +106,7 @@
     "code": "cgy161",
     "stock": 7,
     "status": true,
-    "category": "stuff",
+    "category": "celular",
     "id": 10
-  },
-  {
-    "name": "Nuevo Producto",
-    "desc": "producto de prueba postman",
-    "price": 123456,
-    "thumbnail": "Imagen no Disponible",
-    "code": "852lkj",
-    "stock": 11111,
-    "status": true,
-    "category": "stuff",
-    "id": 11
   }
 ]

@@ -8,46 +8,62 @@ class CartManager {
         fs.writeFileSync(path, '[]')
     }
 
-    async addCart(){
-        
-        const content = await  fs.promises.readFile(this.path, 'utf-8');
-        const carts = JSON.parse(content);
+    async addCart() {
 
-        const cart = {id: ++CartManager.id, products: []}
+        try {
+            const content = await fs.promises.readFile(this.path, 'utf-8');
+            const carts = JSON.parse(content);
 
-        carts.push(cart); 
+            const cart = { id: ++CartManager.id, products: [] };
 
-        await fs.promises.writeFile(this.path, JSON.stringify(carts,null, '\t'));
+            carts.push(cart);
+
+            await fs.promises.writeFile(this.path, JSON.stringify(carts, null, '\t'));
+            
+        } catch (error) {
+            console.error("Error al agregar carrito:", error);
+        }
     }
 
     async getCart(id) {
 
-        const content = await  fs.promises.readFile(this.path, 'utf-8');
-        const carts = JSON.parse(content);
+        try {
+            const content = await fs.promises.readFile(this.path, 'utf-8');
+            const carts = JSON.parse(content);
 
-        const cart = carts.find(i=>i.id == id)
+            const cart = carts.find(i => i.id == id);
 
-        return cart; 
+            return cart;
+
+        } catch (error) {
+            console.error("Error al recuperar el carrito:", error);
+            return null;
+        }
     }
 
     async addProduct(id, productId) {
 
-        const content = await  fs.promises.readFile(this.path, 'utf-8');
-        const carts = JSON.parse(content);
+        try {
+            const content = await fs.promises.readFile(this.path, 'utf-8');
+            const carts = JSON.parse(content);
+    
+            const cartIndex = carts.findIndex(c => c.id == id);
+            let cart = carts[cartIndex];
+    
+            let existingProductIndex = cart.products.findIndex(p => p.product == productId);
+            if (existingProductIndex >= 0) {
+                cart.products[existingProductIndex].quantity += 1;
+            } else {
+                cart.products.push({ product: productId, quantity: 1 });
+            }
+    
+            carts[cartIndex] = cart;
+    
+            await fs.promises.writeFile(this.path, JSON.stringify(carts, null, '\t'));
 
-        const cartIndex = carts.findIndex(c => c.id == id);
-        let cart = carts[cartIndex];
-
-        let existingProductIndex = cart.products.findIndex(p => p.product == productId)
-        if(existingProductIndex >= 0) {
-            cart.products[existingProductIndex].quantity += 1;
-        } else {
-            cart.products.push({product: productId, quantity: 1});        
+        } catch (error) {
+            console.error("Error al agregar el producto:", error);
         }
-
-        carts[cartIndex] = cart;
-
-        await fs.promises.writeFile(this.path, JSON.stringify(carts,null, '\t'));
     }
     
 }
