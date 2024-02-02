@@ -9,11 +9,11 @@ router.get('/', async (req, res) => {
     try {
         let products = await manager.getProducts();
     
-        const { desc, limit } = req.query;
+        const { description, limit } = req.query;
     
-        if (desc) {
-            const lowercaseDesc = desc.toLowerCase();
-            products = products.filter(p => p.desc.toLowerCase().includes(lowercaseDesc));
+        if (description) {
+            const lowercaseDesc = description.toLowerCase();
+            products = products.filter(p => p.description.toLowerCase().includes(lowercaseDesc));
         }
     
         const limitValue = parseInt(limit);
@@ -50,19 +50,59 @@ router.get('/:pid', async (req, res) => {
 router.post('/', async (req, res) => {
 
     try {
-        const { name, desc, price, thumbnail, code, stock, status, category } = req.body;
+        const { title, description, price, thumbnails, code, stock, status, category } = req.body;
   
-        if (!name || !desc || !price || !thumbnail || !code || !stock || !status || !category) {
+        if (!title || !description || !price || !code || !stock || !status || !category) {
             return res.status(400).send({ error: 'Todos los campos son obligatorios.' });
         }
 
-        const newProduct = await manager.addProduct(name, desc, price, thumbnail, code, stock, status, category);
+        const newProduct = await manager.addProduct(title, description, price, thumbnails, code, stock, status, category);
   
         res.send({ status: 'success', payload: newProduct });
 
     } catch (error) {
         res.status(400).send({ error: error.message });
     }
-  });
+});
+
+router.put('/:pid', async (req, res) => {
+
+    const id = parseInt(req.params.pid);
+
+    if (isNaN(id)) {
+        return res.status(400).send('ID de producto invalida');
+    }
+
+    const updatedValues = req.body;
+
+    try {
+        await manager.updateProduct(id, updatedValues);
+        res.send({ status: 'success', updatedValues });
+        
+    } catch (error) {
+        console.error("Error al actualizar el producto:", error);
+        res.status(500).send("Error interno del server");
+    }
+});
+
+router.delete('/:pid', async (req, res) => {
+    
+    const id = parseInt(req.params.pid);
+
+    if (isNaN(id)) {
+        return res.status(400).send('ID de producto invalida');
+    }
+
+    const deletedProduct = await manager.getProductById(id);
+
+    try {
+        await manager.deleteProduct(id);
+        res.send({ status: 'success', deletedProduct });
+
+    } catch (error) {
+        console.error("Error al eliminar el producto:", error);
+        res.status(500).send("Error interno del servidor");
+    }
+});
 
 module.exports = router;

@@ -2,47 +2,9 @@ const {Router} = require('express');
 const CartManager = require('../CartManager');
 const ProductManager = require('../ProductManager');
 
-const productsManager = new ProductManager(__dirname + '/../output/listaProductos.json');
 const cartManager = new CartManager(__dirname + '/../output/listaCarrito.json');
+const productManager = new ProductManager(__dirname + '/../output/listaProductos.json');
 const router = Router();
-
-router.put('/:pid', async (req, res) => {
-
-    const id = parseInt(req.params.pid);
-
-    if (isNaN(id)) {
-        return res.status(400).send('ID de producto invalida');
-    }
-
-    const updatedValues = req.body;
-
-    try {
-        await productsManager.updateProduct(id, updatedValues);
-        res.send({ status: 'success' });
-        
-    } catch (error) {
-        console.error("Error al actualizar el producto:", error);
-        res.status(500).send("Error interno del server");
-    }
-});
-
-router.delete('/:pid', async (req, res) => {
-    
-    const id = parseInt(req.params.pid);
-    
-    if (isNaN(id)) {
-        return res.status(400).send('ID de producto invalida');
-    }
-    
-    try {
-        await productsManager.deleteProduct(id);
-        res.send({ status: 'success' });
-
-    } catch (error) {
-        console.error("Error al eliminar el producto:", error);
-        res.status(500).send("Error interno del servidor");
-    }
-})
 
 router.post('/', async (req, res)=>{
 
@@ -73,16 +35,30 @@ router.get('/:cid', async (req, res) => {
     }
 });
 
-router.post('/:cid/product/:pid', async (req, res)=>{
+router.post('/:cid/product/:pid', async (req, res) => {
 
     try {
-        await cartManager.addProduct(req.params.cid, req.params.pid);
-        res.send({ status: 'success' });
 
+        const cartId = parseInt(req.params.cid);
+        const productId = parseInt(req.params.pid);
+
+        if (isNaN(cartId) || isNaN(productId)) {
+            return res.status(400).send('ID de producto o carrito invalido(s)');
+        }
+
+        const cart = await cartManager.getCart(cartId);
+        const product = await productManager.getProductById(productId);
+
+        if (product) {
+            await cartManager.addProduct(cartId, productId);
+            res.send({ status: 'success' });
+        } else {
+            res.status(404).send({ error: `Producto con la ID ${productId} no encontrado` });
+        }
     } catch (error) {
-        console.error("Error al agregar producto al carrito:", error);
-        res.status(500).send("Error interno del servidor");
+        console.error("Error al agregar el producto al carrito:", error);
+        res.status(500).send("Error Interno del Server");
     }
-})
+});
 
 module.exports = router;

@@ -1,9 +1,12 @@
 [
   {
-    "name": "Pava Electrica",
-    "desc": "una pava que hierve el agua en solo 2 minutos",
+    "title": "Pava Electrica",
+    "description": "una pava que hierve el agua en solo 2 minutos",
     "price": 10000,
-    "thumbnail": "Imagen no Disponible",
+    "thumbnails": [
+      "Imagen no Disponible",
+      "linkDeImagen.com"
+    ],
     "code": "abc123",
     "stock": 25,
     "status": true,
@@ -11,10 +14,13 @@
     "id": 1
   },
   {
-    "name": "Celular",
-    "desc": "celular de gama media",
+    "title": "Celular",
+    "description": "celular de gama media",
     "price": 100000,
-    "thumbnail": "Imagen no Disponible",
+    "thumbnails": [
+      "Imagen no Disponible",
+      "linkDeImagen.com"
+    ],
     "code": "fgh456",
     "stock": 10,
     "status": true,
@@ -22,10 +28,13 @@
     "id": 2
   },
   {
-    "name": "Teclado",
-    "desc": "teclado QWERTY estandar",
+    "title": "Teclado",
+    "description": "teclado QWERTY estandar",
     "price": 8000,
-    "thumbnail": "Imagen no Disponible",
+    "thumbnails": [
+      "Imagen no Disponible",
+      "linkDeImagen.com"
+    ],
     "code": "jkl789",
     "stock": 35,
     "status": true,
@@ -33,10 +42,13 @@
     "id": 3
   },
   {
-    "name": "Teclado marca X",
-    "desc": "teclado de la marca X",
+    "title": "Teclado marca X",
+    "description": "teclado de la marca X",
     "price": 18000,
-    "thumbnail": "Imagen no Disponible",
+    "thumbnails": [
+      "Imagen no Disponible",
+      "linkDeImagen.com"
+    ],
     "code": "zxc101",
     "stock": 20,
     "status": true,
@@ -44,10 +56,13 @@
     "id": 4
   },
   {
-    "name": "Celular marca X",
-    "desc": "celular de la marca X",
+    "title": "Celular marca X",
+    "description": "celular de la marca X",
     "price": 58000,
-    "thumbnail": "Imagen no Disponible",
+    "thumbnails": [
+      "Imagen no Disponible",
+      "linkDeImagen.com"
+    ],
     "code": "vbn111",
     "stock": 5,
     "status": true,
@@ -55,10 +70,13 @@
     "id": 5
   },
   {
-    "name": "Pava Electrica marca X",
-    "desc": "pava electrica de la marca X",
+    "title": "Pava Electrica marca X",
+    "description": "pava electrica de la marca X",
     "price": 18000,
-    "thumbnail": "Imagen no Disponible",
+    "thumbnails": [
+      "Imagen no Disponible",
+      "linkDeImagen.com"
+    ],
     "code": "mlp121",
     "stock": 9,
     "status": true,
@@ -66,10 +84,13 @@
     "id": 6
   },
   {
-    "name": "Linterna",
-    "desc": "linterna de hogar estandar",
+    "title": "Linterna",
+    "description": "linterna de hogar estandar",
     "price": 5000,
-    "thumbnail": "Imagen no Disponible",
+    "thumbnails": [
+      "Imagen no Disponible",
+      "linkDeImagen.com"
+    ],
     "code": "nko131",
     "stock": 50,
     "status": true,
@@ -77,10 +98,13 @@
     "id": 7
   },
   {
-    "name": "Linterna marca X",
-    "desc": "linterna de la marca X",
+    "title": "Linterna marca X",
+    "description": "linterna de la marca X",
     "price": 9500,
-    "thumbnail": "Imagen no Disponible",
+    "thumbnails": [
+      "Imagen no Disponible",
+      "linkDeImagen.com"
+    ],
     "code": "bji141",
     "stock": 25,
     "status": true,
@@ -88,10 +112,13 @@
     "id": 8
   },
   {
-    "name": "Teclado marca Z",
-    "desc": "teclado de la marca Z",
+    "title": "Teclado marca Z",
+    "description": "teclado de la marca Z",
     "price": 13500,
-    "thumbnail": "Imagen no Disponible",
+    "thumbnails": [
+      "Imagen no Disponible",
+      "linkDeImagen.com"
+    ],
     "code": "vhu151",
     "stock": 3,
     "status": true,
@@ -99,14 +126,27 @@
     "id": 9
   },
   {
-    "name": "Celular marca X",
-    "desc": "celular de la marca z",
+    "title": "Celular marca X",
+    "description": "celular de la marca z",
     "price": 155000,
-    "thumbnail": "Imagen no Disponible",
+    "thumbnails": [
+      "Imagen no Disponible",
+      "linkDeImagen.com"
+    ],
     "code": "cgy161",
     "stock": 7,
     "status": true,
     "category": "celular",
     "id": 10
+  },
+  {
+    "title": "Nuevo Producto",
+    "description": "producto de prueba postman",
+    "price": 123456,
+    "code": "afasdas",
+    "stock": 11111,
+    "status": true,
+    "category": "stuff",
+    "id": 11
   }
 ]

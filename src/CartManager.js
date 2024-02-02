@@ -54,7 +54,7 @@ class CartManager {
             if (existingProductIndex >= 0) {
                 cart.products[existingProductIndex].quantity += 1;
             } else {
-                cart.products.push({ product: productId, quantity: 1 });
+                cart.products.push({ product: parseInt(productId), quantity: 1 });
             }
     
             carts[cartIndex] = cart;

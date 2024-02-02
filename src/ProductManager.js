@@ -38,9 +38,9 @@ class ProductManager {
         }
     }
 
-    async addProduct(name, desc, price, thumbnail, code, stock, status, category) {
+    async addProduct(title, description, price, thumbnails, code, stock, status, category) {
 
-        if (name && desc && price && thumbnail && code && stock && status && category) {
+        if (title && description && price && code && stock && status && category) {
 
             const existingProduct = this.products.find(product => product.code === code);
 
@@ -48,10 +48,10 @@ class ProductManager {
                 console.error(`Error, Producto No Agregado: El producto con el codigo "${code}" ya existe.\n`);
             } else {
                 let product = {}
-                product.name = name;
-                product.desc = desc;
+                product.title = title;
+                product.description = description;
                 product.price = price;
-                product.thumbnail = thumbnail;
+                product.thumbnails = thumbnails;
                 product.code = code;
                 product.stock = stock;
                 product.status = status;
