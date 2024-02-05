@@ -29,6 +29,8 @@ const httpServer = app.listen(port, () => console.log(`El servidor esta corriend
 const io = new Server(httpServer);
 
 io.on('connection', (socket) => {
+  console.log(`Usuario conectado en el socket ${socket.id}`);
+
   socket.on('add-product', async (newProduct) => {
     await manager.addProduct(
       newProduct.title,
@@ -44,5 +46,9 @@ io.on('connection', (socket) => {
     const updatedProducts = await manager.getProducts();
 
     io.emit('update-products', updatedProducts);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('Usuario desconectado');
   });
 });
