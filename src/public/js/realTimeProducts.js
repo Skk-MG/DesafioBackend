@@ -15,15 +15,18 @@ formAddProduct.addEventListener('submit', async (e) => {
       : value.trim();
   });
 
+  console.log(newProduct); 
+
   socket.emit('add-product', newProduct);
 });
+
 
 socket.on('update-products', (data) => {
   cardContainer.innerHTML = '';
 
   data.forEach(product => {
-    const productItem = document.createElement('li');
-    productItem.classList.add('card');
+    const productItem = document.createElement('ul');
+    productItem.classList.add('productList');
     productItem.innerHTML = `
         <h3>${product.title}</h3>
         <p>${product.description}</p>

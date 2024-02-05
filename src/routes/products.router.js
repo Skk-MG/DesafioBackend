@@ -52,7 +52,7 @@ router.post('/', async (req, res) => {
     try {
         const { title, description, price, thumbnails, code, stock, status, category } = req.body;
   
-        if (!title || !description || !price || !code || !stock || !status || !category) {
+        if (!title || !description || !price || !code || !stock || !category) {
             return res.status(400).send({ error: 'Todos los campos son obligatorios.' });
         }
 

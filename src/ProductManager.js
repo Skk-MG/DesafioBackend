@@ -38,35 +38,37 @@ class ProductManager {
         }
     }
 
-    async addProduct(title, description, price, thumbnails, code, stock, status, category) {
+async addProduct(title, description, price, thumbnails, code, stock, status, category) {
+    if (title && description && price && stock && code && category) {
+        const existingProduct = this.products.find(product => product.code === code);
 
-        if (title && description && price && code && stock && status && category) {
-
-            const existingProduct = this.products.find(product => product.code === code);
-
-            if(existingProduct) {
-                console.error(`Error, Producto No Agregado: El producto con el codigo "${code}" ya existe.\n`);
-            } else {
-                let product = {}
-                product.title = title;
-                product.description = description;
-                product.price = price;
-                product.thumbnails = thumbnails;
-                product.code = code;
-                product.stock = stock;
-                product.status = status;
-                product.category = category;
-                product.id = this.idCounter;
-
-    
-                this.products.push(product)
-                this.idCounter += 1;
-                this.writeProductList();
-            }
+        if (existingProduct) {
+            console.error(`Error, Producto No Agregado: El producto con el código "${code}" ya existe.\n`);
+            return null; 
         } else {
-            console.error("Error, Producto No Agregado: Se deben llenar todos los campos.\n")
+            let product = {
+                title,
+                description,
+                price: parseFloat(price),
+                thumbnails,
+                code,
+                stock: parseInt(stock),
+                status,
+                category,
+                id: this.idCounter
+            };
+
+            this.products.push(product);
+            this.idCounter += 1;
+            await this.writeProductList();
+            
+            return product;
         }
+    } else {
+        console.error("Error, Producto No Agregado: Se deben llenar todos los campos.\n");
+        return null;
     }
+}
 
     async writeProductList() {
         try {

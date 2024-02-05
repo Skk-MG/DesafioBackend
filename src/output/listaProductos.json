@@ -115,5 +115,17 @@
     "status": true,
     "category": "Teclado",
     "id": 9
+  },
+  {
+    "title": "Forms Test",
+    "description": "Test description",
+    "price": 12345,
+    "thumbnails": [
+      null
+    ],
+    "code": "TestCode",
+    "stock": 12345,
+    "category": "Test",
+    "id": 10
   }
 ]
