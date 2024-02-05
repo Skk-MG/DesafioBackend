@@ -62,7 +62,6 @@ class ProductManager {
                 this.products.push(product)
                 this.idCounter += 1;
                 this.writeProductList();
-                io.emit('newProduct', product);
             }
         } else {
             console.error("Error, Producto No Agregado: Se deben llenar todos los campos.\n")

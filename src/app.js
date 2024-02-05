@@ -3,7 +3,11 @@ const handlebars = require('express-handlebars');
 const { Server } = require('socket.io');
 const productsRouter = require('./routes/products.router');
 const cartRouter = require('./routes/cart.router');
-const viewsRouter = require('./routes/views.router')
+const viewsRouter = require('./routes/views.router');
+const ProductManager = require("./ProductManager");
+
+
+const manager = new ProductManager(__dirname + '/output/listaProductos.json');
 
 const app = express();
 const port = 8080;
@@ -25,8 +29,20 @@ const httpServer = app.listen(port, () => console.log(`El servidor esta corriend
 const io = new Server(httpServer);
 
 io.on('connection', (socket) => {
-    console.log(`Socket connected, ID ${socket.id}`);
-    socket.on('disconnect', () => {
-      console.log('User disconnected');
-    });
+  socket.on('add-product', async (newProduct) => {
+    await manager.addProduct(
+      newProduct.title,
+      newProduct.description,
+      newProduct.price,
+      newProduct.thumbnails,
+      newProduct.code,
+      newProduct.stock,
+      newProduct.status,
+      newProduct.category
+    );
+
+    const updatedProducts = await manager.getProducts();
+
+    io.emit('update-products', updatedProducts);
   });
+});

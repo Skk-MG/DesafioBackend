@@ -115,18 +115,5 @@
     "status": true,
     "category": "Teclado",
     "id": 9
-  },
-  {
-    "title": "Celular marca X",
-    "description": "Un celular de la marca z",
-    "price": 155000,
-    "thumbnails": [
-      "Imagen no Disponible"
-    ],
-    "code": "cgy161",
-    "stock": 7,
-    "status": true,
-    "category": "Celular",
-    "id": 10
   }
 ]

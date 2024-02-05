@@ -1,22 +1,39 @@
 const socket = io();
 
-function createProductHTML(product) {
-    return `
-        <ul class="productList">
-            <li>Nombre: ${product.title}</li>
-            <li>Descripcion: ${product.description}</li>
-            <li>Precio: $${product.price}</li>
-            <li>Stock Restante: ${product.stock}</li>
-            <li>Categoria: ${product.category}</li>
-            <li>${product.thumbnails}</li>
-            <li>Codigo: ${product.code}</li>
-            <li>ID: ${product.id}</li>
-        </ul>
-    `;
-}
+const cardContainer = document.getElementById('cardProducts');
+const formAddProduct = document.getElementById('formAddProduct');
 
-socket.on('newProduct', (newProduct) => {
-    const productListContainer = document.querySelector('.productListContainer');
-    productListContainer.innerHTML += createProductHTML(newProduct);
+formAddProduct.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const newProduct = {};
+  const formData = new FormData(formAddProduct);
+
+  formData.forEach((value, key) => {
+    newProduct[key] = key === 'thumbnails'
+      ? Array.from(formData.getAll('thumbnails')).map(file => file.name)
+      : value.trim();
+  });
+
+  socket.emit('add-product', newProduct);
 });
 
+socket.on('update-products', (data) => {
+  cardContainer.innerHTML = '';
+
+  data.forEach(product => {
+    const productItem = document.createElement('li');
+    productItem.classList.add('card');
+    productItem.innerHTML = `
+        <h3>${product.title}</h3>
+        <p>${product.description}</p>
+        <p>Precio: ${product.price}</p>
+        <p>Stock: ${product.stock}</p>
+        <p>Category: ${product.category}</p>
+        <p>Thumbnails: ${product.thumbnails}</p>
+        <p>Code: ${product.code}</p>
+        <p>ID: ${product.id}</p>
+    `;
+    cardContainer.appendChild(productItem);
+  });
+});

@@ -1,6 +1,6 @@
 <h1 class="title">Lista de Productos</h1>
 
-<div class="productListContainer">
+<div class="productListContainer" id="cardProducts">
     {{#each products}}
         <ul class="productList">
             <li>Nombre: {{title}}</li>
@@ -18,7 +18,7 @@
 <div class="formContainer">
     <h1 class="title">Agregar un nuevo producto</h1>
 
-    <form class="form" action="/api/products" method="POST" id="addNewProduct">
+    <form class="form" id="formAddProduct" method="POST">
         <p>Formulario de Creacion de Producto</p>
         <label for="title">Title</label>
         <input type="text" id="title" name="title" placeholder="Title" required>
