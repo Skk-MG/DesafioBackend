@@ -3,14 +3,15 @@
 <div class="productListContainer" id="cardProducts">
     {{#each products}}
         <ul class="productList">
-            <li>Nombre: {{title}}</li>
-            <li>Descripcion: {{description}} </li>
-            <li>Precio: ${{price}} </li>
-            <li>Stock Restante: {{stock}}</li>
-            <li>Categoria: {{category}}</li>
-            <li>{{thumbnails}}</li>
-            <li>Codigo: {{code}}</li>
-            <li>ID: {{id}}</li>
+            <li>Nombre: {{this.title}}</li>
+            <li>Descripcion: {{this.description}} </li>
+            <li>Precio: ${{this.price}} </li>
+            <li>Stock Restante: {{this.stock}}</li>
+            <li>Categoria: {{this.category}}</li>
+            <li>{{this.thumbnails}}</li>
+            <li>Codigo: {{this.code}}</li>
+            <li>ID: {{this.id}}</li>
+            <button onclick="deleteProduct({{this.id}})">Borrar</button>
         </ul>
     {{/each}}
 </div>
@@ -18,7 +19,7 @@
 <div class="formContainer">
     <h1 class="title">Agregar un nuevo producto</h1>
 
-    <form class="form" id="formAddProduct" method="POST">
+    <form action="/api/products" method="POST" class="form" id="formAddProduct">
         <p>Formulario de Creacion de Producto</p>
         <label for="title">Title</label>
         <input type="text" id="title" name="title" placeholder="Title" required>

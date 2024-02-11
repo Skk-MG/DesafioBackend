@@ -1,42 +1,28 @@
 const socket = io();
 
-const cardContainer = document.getElementById('cardProducts');
-const formAddProduct = document.getElementById('formAddProduct');
+/*
+const cardProducts = document.querySelector('cardProducts')
 
-formAddProduct.addEventListener('submit', async (e) => {
-  e.preventDefault();
-
-  const newProduct = {};
-  const formData = new FormData(formAddProduct);
-
-  formData.forEach((value, key) => {
-    newProduct[key] = key === 'thumbnails'
-      ? Array.from(formData.getAll('thumbnails')).map(file => file.name)
-      : value.trim();
+socket.on('list updated',({products})=>{
+  cardProducts.innerHTML = ""
+  products.forEach(product => {
+    cardProducts.innerHTML+=`
+      <ul>
+          <li>${product.title}</li>
+          <li>${product.description}</li>
+          <li>$${product.price}</li>
+          <li>${product.stock}</li>
+          <li>${product.category}</li>
+          <li>${product.thumbnails}</li>
+          <li>${product.code}</li>
+          <li>${product.id}</li>
+          <button onclick="deleteItem(${item.id})">delete</button>
+      </ul>`
   });
+})
+*/
 
-  console.log(newProduct); 
-
-  socket.emit('add-product', newProduct);
-});
-
-
-socket.on('update-products', (data) => {
-  cardContainer.innerHTML = '';
-
-  data.forEach(product => {
-    const productItem = document.createElement('ul');
-    productItem.classList.add('productList');
-    productItem.innerHTML = `
-        <h3>${product.title}</h3>
-        <p>${product.description}</p>
-        <p>Precio: ${product.price}</p>
-        <p>Stock: ${product.stock}</p>
-        <p>Category: ${product.category}</p>
-        <p>Thumbnails: ${product.thumbnails}</p>
-        <p>Code: ${product.code}</p>
-        <p>ID: ${product.id}</p>
-    `;
-    cardContainer.appendChild(productItem);
-  });
-});
+function deleteProduct(id){
+  socket.emit('delete product',{id: id})
+  window.location.reload();
+}

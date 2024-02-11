@@ -6,7 +6,6 @@ const cartRouter = require('./routes/cart.router');
 const viewsRouter = require('./routes/views.router');
 const ProductManager = require("./ProductManager");
 
-
 const manager = new ProductManager(__dirname + '/output/listaProductos.json');
 
 const app = express();
@@ -20,6 +19,11 @@ app.engine('handlebars', handlebars.engine());
 app.set('views', `${__dirname}/views`);
 app.set('view engine', 'handlebars');
 
+app.use((req, _res, next) => {
+  req.io = io
+  next();
+})
+
 app.use('/api/products', productsRouter);
 app.use('/api/carts', cartRouter);
 app.use('/', viewsRouter);
@@ -28,30 +32,23 @@ const httpServer = app.listen(port, () => console.log(`El servidor esta corriend
 
 const io = new Server(httpServer);
 
-io.on('connection', (socket) => {
-  console.log(`Usuario Conectado: ${socket.id}`);
+io.on('connection',(socket)=>{
+  console.log('Socket connected')
 
-  socket.on('add-product', async (newProduct) => {
-    console.log('Nuevo Producto:', newProduct);
+  socket.on('new product',async (newProduct)=>{
+      await manager.addProduct(newProduct)
+      const products = await manager.getProducts();
+      io.emit('list updated', {products: products})
+  })
 
-    await manager.addProduct(
-      newProduct.title,
-      newProduct.description,
-      newProduct.price,
-      newProduct.thumbnails,
-      newProduct.code,
-      newProduct.stock,
-      newProduct.status,
-      newProduct.category
-    );
-
-    const updatedProducts = await manager.getProducts();
-
-    io.emit('update-products', updatedProducts);
-  });
+  socket.on('delete product',async ({id})=>{
+      await manager.deleteProduct(id)
+      const products = await manager.getProducts();
+      io.emit('list updated', {products: products})
+  })
 
   socket.on('disconnect', () => {
-    console.log('Usuario desconectado');
+    console.log('Socket desconectado');
   });
-});
+})
 

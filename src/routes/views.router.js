@@ -1,14 +1,17 @@
 const {Router} = require('express');
-const products = require('../output/listaProductos.json')
+const ProductManager = require('../ProductManager');
 
+const manager = new ProductManager(__dirname + '/../output/listaProductos.json');
 
 const router = Router();
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
+    const products = await manager.getProducts();
     res.render('home', { products });
 });
 
-router.get('/realTimeProducts', (req, res) => {
+router.get('/realTimeProducts', async (req, res) => {
+    const products = await manager.getProducts();
     res.render('realTimeProducts', { products });
 });
 

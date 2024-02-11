@@ -56,9 +56,13 @@ router.post('/', async (req, res) => {
             return res.status(400).send({ error: 'Todos los campos son obligatorios.' });
         }
 
-        const newProduct = await manager.addProduct(title, description, price, thumbnails, code, stock, status, category);
+        await manager.addProduct(title, description, price, thumbnails, code, stock, status, category);
+        
+        const products = await manager.getProducts();
+        req.io.emit('list updated', {products: products});
   
-        res.send({ status: 'success', payload: newProduct });
+        // res.send({ status: 'success'});
+        res.redirect('/realTimeProducts')
 
     } catch (error) {
         res.status(400).send({ error: error.message });
