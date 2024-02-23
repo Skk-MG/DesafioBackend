@@ -1,3 +1,4 @@
+/*
 const fs = require("fs");
 
 class ProductManager {
@@ -145,3 +146,4 @@ async addProduct(title, description, price, thumbnails, code, stock, status, cat
 }
 
 module.exports = ProductManager;
+*/

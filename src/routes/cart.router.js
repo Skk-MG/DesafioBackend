@@ -1,9 +1,9 @@
+/*
 const {Router} = require('express');
-const CartManager = require('../CartManager');
-const ProductManager = require('../ProductManager');
+const ProductManager = require('../dao/dbManagers/products');
 
 const cartManager = new CartManager(__dirname + '/../output/listaCarrito.json');
-const productManager = new ProductManager(__dirname + '/../output/listaProductos.json');
+const productManager = new ProductManager();
 const router = Router();
 
 router.post('/', async (req, res)=>{
@@ -62,3 +62,5 @@ router.post('/:cid/product/:pid', async (req, res) => {
 });
 
 module.exports = router;
+
+*/

@@ -115,15 +115,5 @@
     "status": true,
     "category": "Teclado",
     "id": 9
-  },
-  {
-    "title": "Nuevo Producto",
-    "description": "producto de prueba postman",
-    "price": 123456,
-    "code": "afasdas",
-    "stock": 11111,
-    "status": true,
-    "category": "stuff",
-    "id": 10
   }
 ]

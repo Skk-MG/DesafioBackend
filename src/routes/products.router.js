@@ -1,8 +1,8 @@
 const {Router} = require('express');
-const ProductManager = require('../ProductManager');
+const ProductManager = require('../dao/dbManagers/products');
 
 const router = Router();
-const manager = new ProductManager(__dirname + '/../output/listaProductos.json');
+const manager = new ProductManager();
 
 router.get('/', async (req, res) => {
 

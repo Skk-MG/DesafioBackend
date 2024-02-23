@@ -1,31 +1,41 @@
 const express = require("express");
 const handlebars = require('express-handlebars');   
 const { Server } = require('socket.io');
-const productsRouter = require('./routes/products.router');
-const cartRouter = require('./routes/cart.router');
-const viewsRouter = require('./routes/views.router');
-const ProductManager = require("./ProductManager");
+const mongoose = require('mongoose');
 
-const manager = new ProductManager(__dirname + '/output/listaProductos.json');
+const productsRouter = require('./routes/products.router');
+// const cartRouter = require('./routes/cart.router');
+const viewsRouter = require('./routes/views.router');
+const ProductManager = require("./dao/dbManagers/products");
+
+const manager = new ProductManager();
 
 const app = express();
 const port = 8080;
 
-app.use(express.json());
-app.use(express.urlencoded({extended:true}));
-app.use(express.static(`${__dirname}/public`));
+// Database Connection
+mongoose.connect(`mongodb+srv://Skk-MG:nua112vfyafr@codercluster.j9vzyvy.mongodb.net/ecommerce`).then(() => {
+  console.log('Connected Successfuly')
+})
 
+// Views Engine
 app.engine('handlebars', handlebars.engine());
 app.set('views', `${__dirname}/views`);
 app.set('view engine', 'handlebars');
+
+// Middlewares
+app.use(express.json());
+app.use(express.urlencoded({extended:true}));
+app.use(express.static(`${__dirname}/public`));
 
 app.use((req, _res, next) => {
   req.io = io
   next();
 })
 
+// Endpoints
 app.use('/api/products', productsRouter);
-app.use('/api/carts', cartRouter);
+// app.use('/api/carts', cartRouter);
 app.use('/', viewsRouter);
 
 const httpServer = app.listen(port, () => console.log(`El servidor esta corriendo en el puerto ${port}`));
