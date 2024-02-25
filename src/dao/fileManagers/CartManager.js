@@ -1,4 +1,3 @@
-/*
 const fs = require("fs");
 
 class CartManager {
@@ -70,4 +69,3 @@ class CartManager {
 }
 
 module.exports = CartManager;
-*/

@@ -10,8 +10,8 @@
             <li>Categoria: {{this.category}}</li>
             <li>{{this.thumbnails}}</li>
             <li>Codigo: {{this.code}}</li>
-            <li>ID: {{this.id}}</li>
-            <button onclick="deleteProduct({{this.id}})">Borrar</button>
+            <li>ID: {{this._id}}</li>
+            <button onclick="deleteProduct('{{this._id}}')">Borrar</button>
         </ul>
     {{/each}}
 </div>

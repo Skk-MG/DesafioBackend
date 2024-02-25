@@ -13,7 +13,7 @@ const productSchema = new mongoose.Schema({
     },
     price: {
         type: Number,
-        default: '123',
+        default: 123,
         required: true
     },
     thumbnails: {

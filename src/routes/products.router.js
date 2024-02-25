@@ -1,8 +1,8 @@
 const {Router} = require('express');
-const ProductManager = require('../dao/dbManagers/products');
+const ProductManager = require('../dao/dbManagers/productsManager');
 
 const router = Router();
-const manager = new ProductManager();
+const manager = new ProductManager(__dirname+'/../files/listaProductos.json');
 
 router.get('/', async (req, res) => {
 
@@ -32,11 +32,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:pid', async (req, res) => {
 
-    const id = parseInt(req.params.pid);
-
-    if (isNaN(id)) {
-        return res.status(400).send('ID de producto invalida');
-    }
+    const id = req.params.pid;
 
     try {
         const product = await manager.getProductById(id);
@@ -56,10 +52,21 @@ router.post('/', async (req, res) => {
             return res.status(400).send({ error: 'Todos los campos son obligatorios.' });
         }
 
-        await manager.addProduct(title, description, price, thumbnails, code, stock, status, category);
+        const newProduct = {
+            title,
+            description,
+            price,
+            thumbnails,
+            code,
+            stock,
+            status,
+            category
+        };
+
+        const addedProduct = await manager.addProduct(newProduct);
         
-        const products = await manager.getProducts();
-        req.io.emit('list updated', {products: products});
+        // const products = await manager.getProducts();
+        // req.io.emit('list updated', {products: products});
   
         // res.send({ status: 'success'});
         res.redirect('/realTimeProducts')
@@ -71,11 +78,7 @@ router.post('/', async (req, res) => {
 
 router.put('/:pid', async (req, res) => {
 
-    const id = parseInt(req.params.pid);
-
-    if (isNaN(id)) {
-        return res.status(400).send('ID de producto invalida');
-    }
+    const id = req.params.pid;
 
     const updatedValues = req.body;
 
@@ -91,12 +94,8 @@ router.put('/:pid', async (req, res) => {
 
 router.delete('/:pid', async (req, res) => {
     
-    const id = parseInt(req.params.pid);
-
-    if (isNaN(id)) {
-        return res.status(400).send('ID de producto invalida');
-    }
-
+    const id = req.params.pid;
+    
     const deletedProduct = await manager.getProductById(id);
 
     try {

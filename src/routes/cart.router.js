@@ -1,9 +1,9 @@
-/*
 const {Router} = require('express');
-const ProductManager = require('../dao/dbManagers/products');
+const ProductManager = require('../dao/dbManagers/productsManager');
+const CartManager = require('../dao/dbManagers/cartManager');
 
-const cartManager = new CartManager(__dirname + '/../output/listaCarrito.json');
-const productManager = new ProductManager();
+const cartManager = new CartManager(__dirname + '/../files/listaCarrito.json');
+const productManager = new ProductManager(__dirname + '/../files/listaProductos.json');
 const router = Router();
 
 router.post('/', async (req, res)=>{
@@ -20,11 +20,7 @@ router.post('/', async (req, res)=>{
 
 router.get('/:cid', async (req, res) => {
 
-    const id = parseInt(req.params.cid);
-
-    if (isNaN(id)) {
-        return res.status(400).send('ID de producto invalida');
-    }
+    const id = req.params.cid;
 
     try {
         const cart = await cartManager.getCart(id);
@@ -38,13 +34,8 @@ router.get('/:cid', async (req, res) => {
 router.post('/:cid/product/:pid', async (req, res) => {
 
     try {
-
-        const cartId = parseInt(req.params.cid);
-        const productId = parseInt(req.params.pid);
-
-        if (isNaN(cartId) || isNaN(productId)) {
-            return res.status(400).send('ID de producto o carrito invalido(s)');
-        }
+        const cartId = req.params.cid;
+        const productId = req.params.pid;
 
         const cart = await cartManager.getCart(cartId);
         const product = await productManager.getProductById(productId);
@@ -62,5 +53,3 @@ router.post('/:cid/product/:pid', async (req, res) => {
 });
 
 module.exports = router;
-
-*/
