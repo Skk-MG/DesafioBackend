@@ -26,11 +26,21 @@ router.get('/:cid', async (req, res) => {
     try {
         const cart = await cartManager.getCart(id);
         res.send(cart);
-        
     } catch (error) {
         res.status(404).send({ error: `No existe el id ${id}`});
     }
 });
+
+router.get('/', async (req, res) => {
+
+    try {
+        const cart = await cartManager.getAllCarts();
+        res.send(cart);
+    } catch (error) {
+        res.status(404).send({ error: 'No se pudo leer el archivo'});
+    }
+});
+
 
 router.post('/:cid/product/:pid', async (req, res) => {
 
@@ -71,7 +81,22 @@ router.put('/:cid', async (req, res) => {
 });
 
 router.put('/:cid/products/:pid', async (req, res) => {
-// todo
+
+    const newStock = req.body
+    
+    if ( newStock < 0 ) return res.status(404).json({ error: 'La cantidad no puede ser menor a cero' })
+
+    const cartId = req.params.cid;
+    const productId = req.params.pid;
+
+    try {
+        await cartManager.updateQuantity(cartId, productId);
+        res.send({ status: 'success' });
+        
+    } catch (error) {
+        console.error("Error al actualizar el producto:", error);
+        res.status(500).send("Error interno del server");
+    }
 });
 
 module.exports = router;

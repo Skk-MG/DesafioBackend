@@ -12,6 +12,16 @@ class CartManager {
         return cart;
     }
 
+    async getAllCarts() {
+        try {
+            let carts = await CartModel.find().lean();
+            return carts;
+        } catch (error) {
+            console.error('Error al leer los carritos:', error);
+            throw error;
+        }
+    }
+
     async addProduct(id, productId) {
         const cart = await this.getCart(id);
 
@@ -41,6 +51,10 @@ class CartManager {
             console.error(`Error al borrar el producto del carrito: ${error.message}`);
             throw error;
         }
+    }
+
+    async updateQuantity(cartId, productId) {
+        
     }
     
 }
