@@ -1,6 +1,7 @@
 const {Router} = require('express');
 const ProductManager = require('../dao/dbManagers/productsManager');
 const CartManager = require('../dao/dbManagers/cartManager');
+const CartModel = require('../dao/models/cart.model');
 
 const cartManager = new CartManager(__dirname + '/../files/listaCarrito.json');
 const productManager = new ProductManager(__dirname + '/../files/listaProductos.json');
@@ -50,6 +51,27 @@ router.post('/:cid/product/:pid', async (req, res) => {
         console.error("Error al agregar el producto al carrito:", error);
         res.status(500).send("Error Interno del Server");
     }
+});
+
+router.delete('/:cid/products/:pid', async (req, res) => {
+    try {
+        const cartId = req.params.cid;
+        const productId = req.params.pid;
+
+        const updatedCart = await cartManager.deleteProductFromCart(cartId, productId);
+
+        res.send({ status: 'success', cart: updatedCart });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+router.put('/:cid', async (req, res) => {
+// todo
+});
+
+router.put('/:cid/products/:pid', async (req, res) => {
+// todo
 });
 
 module.exports = router;

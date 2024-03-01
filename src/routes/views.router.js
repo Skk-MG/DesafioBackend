@@ -27,4 +27,8 @@ router.get('/chat',(req, res)=>{
     res.render('chat',{})
 })
 
+router.get('/products’',(req, res)=>{
+    res.render('products’',{})
+})
+
 module.exports = router;

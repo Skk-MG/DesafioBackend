@@ -52,7 +52,7 @@ class ProductManager {
         try {
             await ProductModel.deleteOne({_id: id})
         } catch (error) {
-            console.error('Error al actualizar el producto:', error);
+            console.error('Error al eliminar el producto:', error);
             throw error;
         }
     }

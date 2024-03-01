@@ -24,6 +24,24 @@ class CartManager {
 
         await CartModel.updateOne({_id: id}, cart)
     }
+
+    async deleteProductFromCart(cartId, productId) {
+        try {
+            const cart = await CartModel.findById(cartId);
+    
+            if (!cart) {
+                throw new Error('Cart not found');
+            }
+    
+            cart.products = cart.products.filter(p => p.product !== productId);
+    
+            await cart.save();
+            return cart;
+        } catch (error) {
+            console.error(`Error al borrar el producto del carrito: ${error.message}`);
+            throw error;
+        }
+    }
     
 }
 

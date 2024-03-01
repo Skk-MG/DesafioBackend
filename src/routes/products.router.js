@@ -1,32 +1,55 @@
 const {Router} = require('express');
 const ProductManager = require('../dao/dbManagers/productsManager');
+const ProductModel = require('../dao/models/product.model');
 
 const router = Router();
 const manager = new ProductManager(__dirname+'/../files/listaProductos.json');
 
 router.get('/', async (req, res) => {
 
+    let limit = req.query.limit || 10;
+    let page = req.query.page || 1;
+    let sort = parseInt(req.query.sort);
+    let opt = {};
+    let status = 'success';
+
     try {
-        let products = await manager.getProducts();
-    
-        const { description, limit } = req.query;
-    
-        if (description) {
-            const lowercaseDesc = description.toLowerCase();
-            products = products.filter(p => p.description.toLowerCase().includes(lowercaseDesc));
+        if (req.query.query){
+            opt = {
+                $or: [{description:req.query.query }, {category: req.query.query} ]
+            }
         }
-    
-        const limitValue = parseInt(limit);
-        
-        if (!isNaN(limitValue) && limitValue > 0) {
-            products = products.slice(0, limitValue);
+
+        console.log(opt)
+        console.log(req.query)
+        console.log(req.query.query)
+
+
+        let sortOption = {}
+        if (sort) {
+            sortOption = { price: sort };
         }
-    
-        res.send(products);
-        
+
+        let result = await ProductModel.paginate(opt, { limit: limit, page: page, sort: sortOption, lean: true });
+
+        const paginateData = {
+            status: 'success',
+            payload: result.docs,
+            totalPages: result.totalPages,
+            prevPage: result.prevPage,
+            nextPage: result.nextPage,
+            page: result.page,
+            hasPrevPage: result.hasPrevPage,
+            hasNextPage: result.hasNextPage,
+            nextLink: result.hasNextPage ? `/api/products?page=${result.nextPage}` : null,
+            prevLink: result.hasPrevPage ? `/api/products?page=${result.prevPage}` : null
+        };
+
+        res.send(paginateData);
+
     } catch (error) {
-        console.error("Error al retirar los productos:", error);
-        res.status(500).send("Error interno del server");
+        status = 'error';
+        res.status(500).send({ status, error: error.message });
     }
 });
 
