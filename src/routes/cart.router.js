@@ -25,6 +25,7 @@ router.get('/:cid', async (req, res) => {
 
     try {
         const cart = await cartManager.getCart(id);
+        console.log(cart)
         res.send(cart);
     } catch (error) {
         res.status(404).send({ error: `No existe el id ${id}`});
@@ -68,35 +69,50 @@ router.delete('/:cid/products/:pid', async (req, res) => {
         const cartId = req.params.cid;
         const productId = req.params.pid;
 
-        const updatedCart = await cartManager.deleteProductFromCart(cartId, productId);
+        await cartManager.deleteProductFromCart(cartId, productId);
 
-        res.send({ status: 'success', cart: updatedCart });
+        res.send({ status: 'success' });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
 
+
 router.put('/:cid', async (req, res) => {
-// todo
+    const cartId = req.params.cid;
+    const productList = req.body;
+    
+    if (productList) {
+        const updatedProducts = await cartManager.updateCart(cartId, productList);
+        res.send({ status: 'success', updatedProducts});
+    } else {
+        res.status(404).send({ error: `Carrito con la ID ${cartId} no encontrado` });
+    }
 });
 
 router.put('/:cid/products/:pid', async (req, res) => {
-
-    const newStock = req.body
-    
-    if ( newStock < 0 ) return res.status(404).json({ error: 'La cantidad no puede ser menor a cero' })
-
     const cartId = req.params.cid;
     const productId = req.params.pid;
+    const newProductQuantity = req.body;
 
-    try {
-        await cartManager.updateQuantity(cartId, productId);
-        res.send({ status: 'success' });
-        
-    } catch (error) {
-        console.error("Error al actualizar el producto:", error);
-        res.status(500).send("Error interno del server");
+    if (newProductQuantity) {
+        const updatedQuantity = await cartManager.updateQuantity(cartId, productId, newProductQuantity)
+        res.send({ status: 'success', updatedQuantity});
+    } else {
+        res.status(404).send({ error: `Hubo un error al actualizar la cantidad del producto` });
     }
+});
+
+router.delete('/:cid/', async (req, res) => {
+    try {
+        const cartId = req.params.cid;
+
+        await cartManager.deleteAllProducts(cartId);
+        res.send({ status: 'success' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+
 });
 
 module.exports = router;

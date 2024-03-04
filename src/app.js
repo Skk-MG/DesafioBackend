@@ -52,7 +52,7 @@ io.on('connection', async (socket)=>{
       io.emit('list updated', {products: products})
   })
 
-  // Product Form Delete
+  // Product Button Delete
   socket.on('delete product',async ({id})=>{
       await manager.deleteProduct(id)
       const products = await manager.getProducts();

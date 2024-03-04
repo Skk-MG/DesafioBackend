@@ -16,14 +16,9 @@ router.get('/', async (req, res) => {
     try {
         if (req.query.query){
             opt = {
-                $or: [{description:req.query.query }, {category: req.query.query} ]
+                $or: [{description: req.query.query }, {category: req.query.query} ]
             }
         }
-
-        console.log(opt)
-        console.log(req.query)
-        console.log(req.query.query)
-
 
         let sortOption = {}
         if (sort) {
