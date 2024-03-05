@@ -12,8 +12,8 @@ class CartManager {
         return cart;
     }
     
-    async getCartLean() {
-        const cart = await CartModel.find().lean()
+    async getCartLean(id) {
+        const cart = await CartModel.find({_id: id}).lean()
         return cart;
     }
     
@@ -88,12 +88,11 @@ class CartManager {
 
             if(index >= 0) {
                 cart.products[index].quantity = newProductQuantity;  
-                console.log(cart.products[index].quantity)
             }else{
                 console.error('Hubo un error al actualizar la cantidad del producto')
             }
 
-            // await CartModel.updateOne({_id: cartId}, cart);
+            await CartModel.updateOne({_id: cartId}, cart);
         } catch (error) {
             console.error('Error al actualizar la cantidad:', error);
             throw error;

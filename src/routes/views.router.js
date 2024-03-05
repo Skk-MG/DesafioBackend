@@ -70,8 +70,7 @@ router.get('/carts/:cid',async (req, res)=>{
 
         let cart = await cartManager.getCartLean(cartId);
 
-        console.log(cart)
-        res.render('carts',{cart})
+        res.render('carts', {cart})
         
     } catch (error) {
         res.status(500).send({ error: error.message });

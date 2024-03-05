@@ -25,7 +25,7 @@ router.get('/:cid', async (req, res) => {
 
     try {
         const cart = await cartManager.getCart(id);
-        console.log(cart)
+
         res.send(cart);
     } catch (error) {
         res.status(404).send({ error: `No existe el id ${id}`});
@@ -93,7 +93,7 @@ router.put('/:cid', async (req, res) => {
 router.put('/:cid/products/:pid', async (req, res) => {
     const cartId = req.params.cid;
     const productId = req.params.pid;
-    const newProductQuantity = req.body;
+    const newProductQuantity = req.body.quantity;
 
     if (newProductQuantity) {
         const updatedQuantity = await cartManager.updateQuantity(cartId, productId, newProductQuantity)
