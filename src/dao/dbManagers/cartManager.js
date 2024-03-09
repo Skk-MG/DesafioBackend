@@ -13,8 +13,13 @@ class CartManager {
     }
     
     async getCartLean(id) {
-        const cart = await CartModel.find({_id: id}).lean()
-        return cart;
+        const cart = await CartModel.find({_id: id}).populate('products.product').lean()
+
+        if(!cart || cart.length == 0){
+            throw new Error('El carrito no existe')
+        }
+
+        return cart[0];
     }
     
     async getAllCarts() {

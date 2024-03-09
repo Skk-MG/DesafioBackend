@@ -68,12 +68,12 @@ router.get('/carts/:cid',async (req, res)=>{
     try {
         const cartId = req.params.cid;
 
-        let cart = await cartManager.getCartLean(cartId);
+        const cart = await cartManager.getCartLean(cartId);
 
-        res.render('carts', {cart})
+        res.render('carts', cart)
         
     } catch (error) {
-        res.status(500).send({ error: error.message });
+        res.send({status:'error', error: error.message})
     }
 })
 
