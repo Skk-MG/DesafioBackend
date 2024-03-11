@@ -1,12 +1,25 @@
-<h1 class="title">Products</h1>
 
+<div class="productList">
+    <h1 class="title"> Bienvenido {{this.user.name}}</h1>
+    <h2>Credenciales</h2>
+    <p>Usuario: {{this.user.name}}</p>
+    <p>Correo: {{this.user.email}}</p>
+    <p>Edad: {{this.user.age}}</p>
+    <p>Rol: {{this.user.role}}</p>
+    <br/>
+    <a href="/api/sessions/logout"><button class="btn">Cerrar Sesion</button></a>
+</div>
+
+<h1 class="title">Productos</h1>
 <div class="productListContainer">
     {{#each products}}
         <ul class="productList">
             <li>Nombre: {{this.title}}</li>
             <li>Descripcion: {{this.description}} </li>
             <li>Precio: ${{this.price}} </li>
-            <button>Agregar al carrito</button>
+            <li>Stock: {{this.stock}}</li>
+            <br/>
+            <button class="btn">Agregar al carrito</button>
         </ul>
     {{/each}}
 </div>

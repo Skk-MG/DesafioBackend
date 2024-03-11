@@ -8,7 +8,23 @@ const cartManager = new CartManager();
 
 const router = Router();
 
-router.get('/', async (req, res) => {
+// Middlewares
+const publicAccess = (req, res, next) => {
+    if(req.session.user) return res.redirect('/products')
+
+    next();
+}
+
+const privateAccess = (req, res, next) => {
+    if(!req.session.user) {
+        console.log('No esta logueado')
+        return res.redirect('/login')
+    }
+
+    next();
+}
+
+router.get('/', privateAccess, async (req, res) => {
     const products = await manager.getProducts();
     res.render('home', {
         products,
@@ -16,7 +32,7 @@ router.get('/', async (req, res) => {
     });
 });
 
-router.get('/realTimeProducts', async (req, res) => {
+router.get('/realTimeProducts', privateAccess, async (req, res) => {
     const products = await manager.getProducts();
     res.render('realTimeProducts', {
         products,
@@ -25,11 +41,11 @@ router.get('/realTimeProducts', async (req, res) => {
     });
 });
 
-router.get('/chat',(req, res)=>{
+router.get('/chat', privateAccess, (req, res)=>{
     res.render('chat',{})
 })
 
-router.get('/products',async (req, res)=>{
+router.get('/products', privateAccess, async (req, res)=>{
 
     let limit = req.query.limit || 10;
     let page = req.query.page || 1;
@@ -55,7 +71,7 @@ router.get('/products',async (req, res)=>{
         let nextLink = rest.hasNextPage ? `/api/products?page=${rest.nextPage}` : null
         let prevLink = rest.hasPrevPage ? `/api/products?page=${rest.prevPage}` : null
 
-        res.render('products',{products, ...rest, nextLink, prevLink})
+        res.render('products',{products, ...rest, nextLink, prevLink, user: req.session.user})
 
     } catch (error) {
         status = 'error';
@@ -63,7 +79,7 @@ router.get('/products',async (req, res)=>{
     }
 })
 
-router.get('/carts/:cid',async (req, res)=>{
+router.get('/carts/:cid', privateAccess, async (req, res)=>{
 
     try {
         const cartId = req.params.cid;
@@ -75,6 +91,14 @@ router.get('/carts/:cid',async (req, res)=>{
     } catch (error) {
         res.send({status:'error', error: error.message})
     }
+})
+
+router.get('/register', publicAccess, (req, res) => {
+    res.render('register', {});
+})
+
+router.get('/login', publicAccess, (req, res) => {
+    res.render('login');
 })
 
 module.exports = router;

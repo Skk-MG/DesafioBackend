@@ -11,7 +11,7 @@
             <li>{{this.thumbnails}}</li>
             <li>Codigo: {{this.code}}</li>
             <li>ID: {{this._id}}</li>
-            <button onclick="deleteProduct('{{this._id}}')">Borrar</button>
+            <button class="btn" onclick="deleteProduct('{{this._id}}')">Borrar</button>
         </ul>
     {{/each}}
 </div>
@@ -42,7 +42,7 @@
         <label for="thumbnails">Thumbnails</label>
         <input type="text" id="thumbnails" name="thumbnails" placeholder="Thumbnails" multiple>
 
-        <button class="btnSubmit" type="submit">Crear Producto</button>
+        <button class="btn btnSubmit" type="submit">Crear Producto</button>
     </form>
 </div>
 

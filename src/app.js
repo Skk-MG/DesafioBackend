@@ -2,9 +2,13 @@ const express = require("express");
 const handlebars = require('express-handlebars');   
 const { Server } = require('socket.io');
 const mongoose = require('mongoose');
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
+require('dotenv').config();
 
 const productsRouter = require('./routes/products.router');
 const cartRouter = require('./routes/cart.router');
+const sessionRouter = require('./routes/session.router');
 const viewsRouter = require('./routes/views.router');
 
 const MessageModel = require('./dao/models/messages.model');
@@ -16,9 +20,20 @@ const app = express();
 const port = 8080;
 
 // Database Connection
-mongoose.connect(`mongodb+srv://Skk-MG:nua112vfyafr@codercluster.j9vzyvy.mongodb.net/ecommerce`).then(() => {
+mongoose.connect(`mongodb+srv://Skk-MG:${process.env.MONGO_PASSWORD}@codercluster.j9vzyvy.mongodb.net/ecommerce`).then(() => {
   console.log('Connected Successfuly')
 })
+
+// Session Setting
+app.use(session({
+  secret: 'newSecret',
+  resave: false,
+  saveUninitialized: false,
+  store: MongoStore.create({
+    mongoUrl: `mongodb+srv://Skk-MG:${process.env.MONGO_PASSWORD}@codercluster.j9vzyvy.mongodb.net/ecommerce`,
+    ttl: 3600
+  })
+}))
 
 // Views Engine
 app.engine('handlebars', handlebars.engine());
@@ -77,4 +92,5 @@ io.on('connection', async (socket)=>{
 // Routes
 app.use('/api/products', productsRouter);
 app.use('/api/carts', cartRouter);
+app.use('/api/sessions', sessionRouter);
 app.use('/', viewsRouter);
