@@ -1,45 +1,32 @@
 const {Router} = require('express');
+const passport = require('passport');
 const UserModel = require('../dao/models/user.model');
+const { createHash, isValidPassword } = require('../utils');
 
 const router = Router();
 
-router.post('/register', async (req,res) => {
-    let { firstName, lastName, email, age, password, role } = req.body;
-
-    if ( !firstName || !lastName || !email || !age || !password) {
-        return res.status(400).send({status: 'error', error: 'Falta Informacion'})
-    }
-
-    if (email === 'adminCoder@coder.com' && password === 'adminCod3r123' ) {
-        role = 'admin'
-    } else {
-        role = 'usuario'
-    }
-
-    await UserModel.create({ firstName, lastName, email, age, password, role });
+router.post('/register', passport.authenticate('register', {failureRedirect: '/api/sessions/registerFailure'}), async (req,res) => {
     res.send({status: 'success', message: 'Usuario Registrado'});
 })
 
-router.post('/login', async (req,res) => {
+router.get('/registerFailure', (req, res) => {
+    res.status(401).send({status: 'error', error: 'Error de autenticacion'});
+})
 
-    const { email, password } = req.body;
-    if ( !email || !password) {
-        return res.status(400).send({status: 'error', error: 'Falta Informacion'});
-    }
-
-    const user = await UserModel.findOne({email, password});
-    if (!user) {
-        return res.status(401).send({status: 'error', error: 'Credenciales Incorrectas'});
-    }
-
+router.post('/login', passport.authenticate('login', {failureRedirect:'/api/sessions/loginFailure'}), async (req,res) => {
+   
+    const user = req.user;
     req.session.user = {
         name: `${user.firstName} ${user.lastName}`,
         email: user.email,
-        age: user.age,
-        role: user.role
-    };
-
+        age: user.age
+    }
+   
     res.send({status: 'success', payload: req.session.user});
+})
+
+router.get('/loginFailure', (req, res) => {
+    res.status(401).send({status: 'error', error: 'Error al iniciar sesion'});
 })
 
 router.get('/logout', (req,res) => {
@@ -49,6 +36,38 @@ router.get('/logout', (req,res) => {
     })
 
     res.redirect('/login')
+})
+
+router.get('/resetPassword', async (req, res) => {
+
+    const { email, password } = req.body;
+    if ( !email || !password) {
+        return res.status(400).send({status: 'error', error: 'Falta Informacion'});
+    }
+
+    const user = await UserModel.findOne({email});
+    if (!user) {
+        return res.status(401).send({status: 'error', error: 'Usuario no Encontrado'});
+    }
+
+    const hashedPassword = createHash(password);
+    await UserModel.updateOne({_id: user._id}, {$set: {password: hashedPassword}});
+
+    res.send({status: 'Success', message: 'Restauracion de contraseña exitosa'})
+
+})
+
+router.get('/github', passport.authenticate('github', {scope: ['user:email']}), async (req, res) => {})
+
+router.get('/githubcallback', passport.authenticate('github', {failureRedirect: '/login'}), async (req, res) => {
+
+    req.session.user = {
+        name: req.user.firstName,
+        email: req.user.email,
+        age: req.user.age
+    }
+   
+    res.redirect('/products')
 })
 
 module.exports = router;

@@ -4,6 +4,7 @@ const { Server } = require('socket.io');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
+const passport = require('passport')
 require('dotenv').config();
 
 const productsRouter = require('./routes/products.router');
@@ -13,6 +14,7 @@ const viewsRouter = require('./routes/views.router');
 
 const MessageModel = require('./dao/models/messages.model');
 const ProductManager = require("./dao/dbManagers/productsManager");
+const initializePassport = require("./config/passport.config");
 
 const manager = new ProductManager(__dirname + '/files/listaProductos.json');
 
@@ -47,12 +49,17 @@ app.use(express.urlencoded({extended:true}));
 // Public files
 app.use(express.static(`${__dirname}/public`));
 
+// Passport
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Socket.io
 app.use((req, _res, next) => {
   req.io = io
   next();
 })
 
-// Socket.io
 const httpServer = app.listen(port, () => console.log(`El servidor esta corriendo en el puerto ${port}`));
 
 const io = new Server(httpServer);

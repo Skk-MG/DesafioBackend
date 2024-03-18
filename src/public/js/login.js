@@ -4,7 +4,11 @@ loginForm.addEventListener('submit', (e) => {
     e.preventDefault()
     const data = new FormData(loginForm)
     const obj = {}
+    console.log('before', data)
     data.forEach((value, key) => obj[key] = value);
+    console.log('after', data)
+    console.log(obj)
+
     fetch('/api/sessions/login', {
         method: 'POST',
         body: JSON.stringify(obj),
@@ -14,6 +18,8 @@ loginForm.addEventListener('submit', (e) => {
     }).then(res => {
         if(res.status == 200) {
             window.location.replace('/products') // Redireccion desde el front
+        } else {
+            alert('Datos incorrectos')
         }
     })
 })
