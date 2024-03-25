@@ -17,7 +17,6 @@ const publicAccess = (req, res, next) => {
 
 const privateAccess = (req, res, next) => {
     if(!req.session.user) {
-        console.log('No esta logueado')
         return res.redirect('/login')
     }
 

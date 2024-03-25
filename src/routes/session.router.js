@@ -17,9 +17,12 @@ router.post('/login', passport.authenticate('login', {failureRedirect:'/api/sess
    
     const user = req.user;
     req.session.user = {
+        id: user._id,
         name: `${user.firstName} ${user.lastName}`,
         email: user.email,
-        age: user.age
+        age: user.age,
+        role: user.role,
+        cart: user.cart
     }
    
     res.send({status: 'success', payload: req.session.user});
@@ -38,7 +41,7 @@ router.get('/logout', (req,res) => {
     res.redirect('/login')
 })
 
-router.get('/resetPassword', async (req, res) => {
+router.post('/resetPassword', async (req, res) => {
 
     const { email, password } = req.body;
     if ( !email || !password) {
@@ -68,6 +71,11 @@ router.get('/githubcallback', passport.authenticate('github', {failureRedirect: 
     }
    
     res.redirect('/products')
+})
+
+router.get('/current', (req, res) => {
+    const user = req.session.user;
+    res.send({payload: user});
 })
 
 module.exports = router;
