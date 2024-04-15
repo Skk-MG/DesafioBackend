@@ -3,6 +3,7 @@ const ProductModel = require("../models/product.model");
 class ProductManager {
 
     async addProduct(product) {
+        
         const existingProduct = await ProductModel.findOne({ code: product.code });
 
         if (existingProduct) {
@@ -40,6 +41,7 @@ class ProductManager {
     }
 
     async updateProduct(id, updatedValues) {
+
         try {
             await ProductModel.updateOne({_id: id}, updatedValues);
         } catch (error) {
@@ -49,6 +51,7 @@ class ProductManager {
     }
 
     async deleteProduct(id) {
+
         try {
             await ProductModel.deleteOne({_id: id})
         } catch (error) {

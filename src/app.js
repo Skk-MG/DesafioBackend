@@ -5,7 +5,6 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const passport = require('passport')
-require('dotenv').config();
 
 const productsRouter = require('./routes/products.router');
 const cartRouter = require('./routes/cart.router');
@@ -15,24 +14,24 @@ const viewsRouter = require('./routes/views.router');
 const MessageModel = require('./dao/models/messages.model');
 const ProductManager = require("./dao/dbManagers/productsManager");
 const initializePassport = require("./config/passport.config");
+const { mongoConnectionLink, sessionSecret, port } = require("./config/config");
 
 const manager = new ProductManager(__dirname + '/files/listaProductos.json');
 
 const app = express();
-const port = 8080;
 
 // Database Connection
-mongoose.connect(`mongodb+srv://Skk-MG:${process.env.MONGO_PASSWORD}@codercluster.j9vzyvy.mongodb.net/ecommerce`).then(() => {
+mongoose.connect(mongoConnectionLink).then(() => {
   console.log('Connected Successfuly')
 })
 
 // Session Setting
 app.use(session({
-  secret: 'newSecret',
+  secret: sessionSecret,
   resave: false,
   saveUninitialized: false,
   store: MongoStore.create({
-    mongoUrl: `mongodb+srv://Skk-MG:${process.env.MONGO_PASSWORD}@codercluster.j9vzyvy.mongodb.net/ecommerce`,
+    mongoUrl: mongoConnectionLink,
     ttl: 3600
   })
 }))
