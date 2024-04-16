@@ -53,7 +53,6 @@ class CartsService {
         const cart = await this.getById(id);
         const index = cart.products.findIndex(p=>p.product._id.toString() == productId)
 
-        console.log(cart.products)
         if(index >= 0){
             cart.products[index].quantity += 1;  
         } else{
@@ -78,7 +77,7 @@ class CartsService {
 
     async updateCartProducts(cartId, content){
         await this.getById(cartId);
-        await this.update(cartId, {items: content })
+        await this.update(cartId, {products: content })
         return this.getById(cartId);
     }
 

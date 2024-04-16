@@ -14,8 +14,8 @@ class CartsDao {
         return await CartModel.create(cart);
     }
 
-    async update(id, product) {
-        return await CartModel.updateOne({_id:id}, product);
+    async update(id, productList) {
+        return await CartModel.updateOne({_id:id}, productList);
     }
 
     async delete(id) {

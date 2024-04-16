@@ -84,7 +84,7 @@ class CartController {
         const productList = req.body;
         
         if (productList) {
-            const updatedProducts = await cartService.update(cartId, productList);
+            const updatedProducts = await cartService.updateCartProducts(cartId, productList);
             res.send({ status: 'success', updatedProducts});
         } else {
             res.status(404).send({ error: `Carrito con la ID ${cartId} no encontrado` });
