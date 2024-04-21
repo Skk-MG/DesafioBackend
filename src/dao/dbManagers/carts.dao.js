@@ -1,4 +1,4 @@
-const CartModel = require("./models/cart.model")
+const CartModel = require("../models/cart.model")
 
 class CartsDao {
 

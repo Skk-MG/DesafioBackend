@@ -1,3 +1,4 @@
+const UserDTO = require('../dao/DTOs/UserDTO');
 const UserModel = require('../dao/models/user.model');
 const { createHash, isValidPassword } = require('../utils');
 
@@ -70,9 +71,9 @@ class SessionController {
     }
 
     static async getCurrent (req, res) {
-
         const user = req.session.user;
-        res.send({payload: user});
+        const userDTO = new UserDTO(user);
+        res.send({payload: userDTO});
     }
     
 }

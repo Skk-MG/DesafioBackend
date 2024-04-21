@@ -1,7 +1,6 @@
 const express = require("express");
 const handlebars = require('express-handlebars');   
 const { Server } = require('socket.io');
-const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const passport = require('passport')
@@ -19,11 +18,6 @@ const { mongoConnectionLink, sessionSecret, port } = require("./config/config");
 const manager = new ProductManager(__dirname + '/files/listaProductos.json');
 
 const app = express();
-
-// Database Connection
-mongoose.connect(mongoConnectionLink).then(() => {
-  console.log('Connected Successfuly')
-})
 
 // Session Setting
 app.use(session({

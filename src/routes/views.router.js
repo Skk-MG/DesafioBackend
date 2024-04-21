@@ -1,5 +1,6 @@
 const {Router} = require('express');
 const ViewsController = require('../controllers/views.controller');
+const checkRole = require('../middlewares/checkRole.middleware');
 
 const router = Router();
 
@@ -21,7 +22,7 @@ router.get('/', privateAccess, ViewsController.goHome);
 
 router.get('/realTimeProducts', privateAccess, ViewsController.getRealTimeProducts);
 
-router.get('/chat', privateAccess, ViewsController.getChat);
+router.get('/chat', privateAccess, checkRole('usuario'),ViewsController.getChat);
 
 router.get('/products', privateAccess, ViewsController.getProducts);
 

@@ -25,7 +25,11 @@ class ViewsController {
     };
 
     static async getChat(req, res) {
-        res.render('chat',{})
+        try {
+            res.render('chat',{})
+        } catch (error) {
+            res.status(error.status || 500).send({status: 'Error', error: error.message})
+        }
     };
 
     static async getProducts(req, res) {
