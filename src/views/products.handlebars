@@ -11,6 +11,15 @@
     <a href="/api/sessions/logout"><button class="btn">Cerrar Sesion</button></a>
 </div>
 
+<div>
+    <h2>Cart</h2>
+    {{#each cart.products}}
+        <p>{{this.product.description}} Cantidad {{this.quantity}} ${{this.product.price}}
+        <button onclick="deleteFromCart('{{../user.cart}}','{{this.product._id}}')">Remover</button> </p>
+    {{/each}}
+    <button onclick="purchaseCart('{{user.cart}}')" class="btn">Realizar Compra</button>
+</div>
+
 <h1 class="title">Productos</h1>
 <div class="productListContainer">
     {{#each products}}
@@ -20,7 +29,7 @@
             <li>Precio: ${{this.price}} </li>
             <li>Stock: {{this.stock}}</li>
             <br/>
-            <button class="btn">Agregar al carrito</button>
+            <button onclick="addToCart('{{../user.cart}}', '{{this._id}}')" class="btn">Agregar al carrito</button>
         </ul>
     {{/each}}
 </div>
@@ -32,3 +41,5 @@
 {{#if hasNextPage}}
     <a href="/products?page={{nextPage}}">Siguiente</a>
 {{/if}}
+
+<script src="/js/products.js"></script>

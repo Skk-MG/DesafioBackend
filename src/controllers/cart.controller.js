@@ -111,6 +111,20 @@ class CartController {
         }
     
     }
+
+    static async purchase(req, res){
+        const {id} = req.params; 
+
+        try {
+            const remainingProducts = await cartsService.purchase(id, req.user.email)
+           
+            res.send({status:'success', payload: remainingProducts})
+
+        } catch (error) {
+            console.log(error)
+            return res.status(error.status || 500).send({status:'error', error:error.message})
+        }
+    }
 }
 
 module.exports = CartController;

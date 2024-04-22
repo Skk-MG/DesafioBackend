@@ -1,8 +1,9 @@
 class CartsService {
 
-    constructor(dao, ProductsService) {
+    constructor(dao, ProductsService, TicketService) {
         this.dao = dao;
         this.productService = ProductsService;
+        this.ticketService = TicketService;
     }
 
     async getAll() {
@@ -44,7 +45,7 @@ class CartsService {
         return await this.dao.delete(id);
     }
 
-    async addProduct(id, productId){
+    async addProduct(id, productId) {
         
         const cart = await this.getById(id);
         const index = cart.products.findIndex(p=>p.product._id.toString() == productId)
@@ -60,7 +61,7 @@ class CartsService {
         return cart;
     }
 
-    async deleteProductById(cartId, productId){
+    async deleteProductById(cartId, productId) {
 
         const cart = await this.getById(cartId);
         await productService.getById(productId);
@@ -71,13 +72,13 @@ class CartsService {
         return this.getById(cartId);
     }
 
-    async updateCartProducts(cartId, content){
+    async updateCartProducts(cartId, content) {
         await this.getById(cartId);
         await this.update(cartId, {products: content })
         return this.getById(cartId);
     }
 
-    async updateProductQuantity(cartId, productId, quantity){
+    async updateProductQuantity(cartId, productId, quantity) {
 
         const cart = await this.getById(cartId);
         await productService.getById(productId)
@@ -96,10 +97,35 @@ class CartsService {
         return this.getById(cartId);
     }
 
-    async deleteAllProducts(cartId){
+    async deleteAllProducts(cartId) {
         await this.getById(cartId);
         await this.update(cartId, {products: [] })
         return this.getById(cartId);
+    }
+
+    async purchase(cartId, userEmail){
+        const cart = await this.getById(cartId);
+        
+        const notPurchasedIds = []
+        let totalAmount = 0; 
+
+        for (let i = 0; i < cart.products.length; i++) {
+            const item = cart.products[p];
+            const remainder = item.product.stock - item.quantity;
+            if(remainder >= 0){
+                await this.productService.update(item.product._id, {...item.product, stock:remainder } )
+                await this.deleteItemById(cartId, item.product._id.toString())
+                totalAmount+= item.quantity * item.product.price;
+            }else{
+                notPurchasedIds.push(item.product._id);
+            }
+        }; 
+
+        if(totalAmount > 0){
+            await this.ticketService.generate(userEmail, totalAmount); 
+        }
+
+        return notPurchasedIds;
     }
 }
 
