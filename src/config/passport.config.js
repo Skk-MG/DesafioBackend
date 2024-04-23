@@ -3,7 +3,7 @@ const local = require('passport-local');
 const GithubStrategy = require('passport-github2')
 const UserModel = require('../dao/models/user.model');
 const { createHash, isValidPassword } = require('../utils');
-const { usersService, cartsService } = require('../repositories/index')
+const { cartsService } = require('../repositories');
 
 const LocalStrategy = local.Strategy;
 
@@ -11,51 +11,55 @@ const initializePassport = () => {
     passport.use('register', new LocalStrategy({
         passReqToCallback: true,
         usernameField: 'email'
-    }, async (req, email, password, done)=>{
-        let existingUser; 
-     
-        existingUser = await usersService.getByProperty("email", email)
-  
+    }, async (req, username, password, done) => {
+        const { firstName, lastName, email, age } = req.body;
+
+        let user = await UserModel.findOne({email: username})
 
         try {
-            
-            const {first_name, last_name } = req.body;
-            if(!first_name || !last_name ) return done(null, false, {message:'incomplete parameters'})
-            
-            if(existingUser) return done(null, false, {message:'user by that email already exist'})
+
+            if(user) {
+                return done(null, false)
+            }
 
             const cart = await cartsService.create();
-            const newUserData = {
-                first_name, 
-                last_name,
-                email,
+
+            const newUser = { 
+                firstName, 
+                lastName, 
+                email, 
+                age, 
                 password: createHash(password),
                 cart: cart._id 
             }
 
-            let result = await usersService.create(newUserData)
+            const result = await UserModel.create(newUser)
+
             return done(null, result)
-            
         } catch (error) {
-            done(error)
+            return done(error)
         }
     }))
 
     passport.use('login', new LocalStrategy({
         usernameField: 'email'
 
-    }, async (email, password, done)=>{
-        try {            
+    }, async (email, password, done) => {
 
-            const user = await usersService.getByProperty("email",email);
-            if(!user)  return done(null, false, {message:'user does not exist'})
-
-            if(!isValidPassword(user, password)) return done(null, false, {message:'Incorrect password'})
-
+        try {
+            const user = await UserModel.findOne({email});
+            if (!user) {
+                return done(null, false);
+            }
+    
+            if(!isValidPassword(user, password)) {
+                return done(null, false);
+            }
+    
             return done(null, user)
 
         } catch (error) {
-            done(error)
+            return done(error);
         }
     }))
 

@@ -1,24 +1,24 @@
 
 <div class="productList">
-    <h1 class="title"> Bienvenido {{this.user.name}}</h1>
+    <h1 class="title"> Bienvenido {{user.name}}</h1>
     <h2>Credenciales</h2>
-    <p>Usuario: {{this.user.name}}</p>
-    <p>Correo: {{this.user.email}}</p>
-    <p>Edad: {{this.user.age}}</p>
-    <p>ID Carrito: {{this.user.cart}}</p>
-    <p>Rol: {{this.user.role}}</p>
+    <p>Usuario: {{user.name}}</p>
+    <p>Correo: {{user.email}}</p>
+    <p>Edad: {{user.age}}</p>
+    <p>ID Carrito: {{user.cart}}</p>
+    <p>Rol: {{user.role}}</p>
     <br/>
     <a href="/api/sessions/logout"><button class="btn">Cerrar Sesion</button></a>
 </div>
 
-<div>
-    <h2>Cart</h2>
-    {{#each cart.products}}
-        <p>{{this.product.description}} Cantidad {{this.quantity}} ${{this.product.price}}
-        <button onclick="deleteFromCart('{{../user.cart}}','{{this.product._id}}')">Remover</button> </p>
-    {{/each}}
-    <button onclick="purchaseCart('{{user.cart}}')" class="btn">Realizar Compra</button>
-</div>
+<h2>Cart</h2>
+{{#each this.cart.products}}
+    <p>{{product.description}} 
+        Cantidad {{this.quantity}} ${{this.product.price}}
+        <button class="btn" onclick="deleteFromCart('{{../user.cart}}','{{this.product._id}}')">Remove</button> 
+    </p>
+{{/each}}
+<button class="btn" onclick="purchaseCart('{{user.cart}}')">Finalizar Compra</button>
 
 <h1 class="title">Productos</h1>
 <div class="productListContainer">
@@ -29,7 +29,7 @@
             <li>Precio: ${{this.price}} </li>
             <li>Stock: {{this.stock}}</li>
             <br/>
-            <button onclick="addToCart('{{../user.cart}}', '{{this._id}}')" class="btn">Agregar al carrito</button>
+            <button class="btn" onclick="addToCart('{{../user.cart}}','{{this._id}}')">Add to cart</button>
         </ul>
     {{/each}}
 </div>
