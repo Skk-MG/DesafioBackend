@@ -61,8 +61,7 @@ class CartController {
     static async deleteProduct (req, res) {
 
         try {
-            const cartId = req.params.cid;
-            const productId = req.params.pid;
+            const {cartId, productId} = req.params;
     
             await cartsService.deleteProductById(cartId, productId);
     

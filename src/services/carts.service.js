@@ -104,12 +104,14 @@ class CartsService {
     }
 
     async purchase(cartId, userEmail){
-        const cart = await this.getById(cartId);
+        const cart = await this.dao.getById(cartId);
+
+        console.log('HERE',cartId)
         
         const notPurchasedIds = []
         let totalAmount = 0; 
 
-        for (let i = 0; i < cart.products.length; i++) {
+        for (let i = 0; i < cart.products.lenght; i++) {
             const item = cart.products[p];
             const remainder = item.product.stock - item.quantity;
             if(remainder >= 0){

@@ -1,4 +1,4 @@
-const addToCart = (cartId, productId)=>{
+const addToCart = (cartId, productId) => {
     fetch(`/api/carts/${cartId}/product/${productId}`,{
         method: "POST"
     }).then(res=>{
@@ -8,7 +8,7 @@ const addToCart = (cartId, productId)=>{
     })
 }
 
-const purchaseCart = (cartId)=>{
+const purchaseCart = (cartId) => {
 
     fetch(`/api/carts/${cartId}/purchase`,{
         method: "GET"
@@ -19,9 +19,11 @@ const purchaseCart = (cartId)=>{
     })
 }
 
-const deleteFromCart = (cartId,productId)=>{
+const deleteFromCart = (cartId, productId) => {
 
-    fetch(`/api/carts/${cartId}/product/${productId}`,{
+    console.log(cartId, productId)
+
+    fetch(`/api/carts/${cartId}/products/${productId}`,{
         method: "DELETE"
     }).then(res=>{
         if(res.status == 200){

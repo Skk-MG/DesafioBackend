@@ -55,7 +55,7 @@ class ViewsController {
             let {docs, ...rest} = await ProductModel.paginate(opt, { limit: limit, page: page, sort: sortOption, lean: true });
             let products = docs;
 
-            const cart = await cartManager.getCart(req.user.cart);
+            const cart = await cartManager.getCartLean(req.user.cart);
     
             let nextLink = rest.hasNextPage ? `/api/products?page=${rest.nextPage}` : null
             let prevLink = rest.hasPrevPage ? `/api/products?page=${rest.prevPage}` : null
