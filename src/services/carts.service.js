@@ -1,9 +1,9 @@
 class CartsService {
 
-    constructor(dao, ProductsService, TicketService) {
+    constructor(dao, productService, ticketService) {
         this.dao = dao;
-        this.productService = ProductsService;
-        this.ticketService = TicketService;
+        this.productService = productService;
+        this.ticketService = ticketService;
     }
 
     async getAll() {
@@ -64,7 +64,7 @@ class CartsService {
     async deleteProductById(cartId, productId) {
 
         const cart = await this.getById(cartId);
-        await productService.getById(productId);
+        await this.productService.getById(productId);
 
         const newContent = cart.products.filter(p=>p.product._id.toString() != productId)
         await this.update(cartId, {products: newContent })
@@ -105,18 +105,16 @@ class CartsService {
 
     async purchase(cartId, userEmail){
         const cart = await this.dao.getById(cartId);
-
-        console.log('HERE',cartId)
         
         const notPurchasedIds = []
         let totalAmount = 0; 
 
-        for (let i = 0; i < cart.products.lenght; i++) {
-            const item = cart.products[p];
+        for (let i = 0; i < cart.products.length; i++) {
+            const item = cart.products[i];
             const remainder = item.product.stock - item.quantity;
             if(remainder >= 0){
                 await this.productService.update(item.product._id, {...item.product, stock:remainder } )
-                await this.deleteItemById(cartId, item.product._id.toString())
+                await this.deleteProductById(cartId, item.product._id)
                 totalAmount+= item.quantity * item.product.price;
             }else{
                 notPurchasedIds.push(item.product._id);

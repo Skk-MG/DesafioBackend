@@ -61,9 +61,9 @@ class CartController {
     static async deleteProduct (req, res) {
 
         try {
-            const {cartId, productId} = req.params;
+            const {cid, pid} = req.params;
     
-            await cartsService.deleteProductById(cartId, productId);
+            await cartsService.deleteProductById(cid, pid);
     
             res.send({ status: 'success' });
         } catch (error) {
@@ -112,10 +112,10 @@ class CartController {
     }
 
     static async purchase(req, res){
-        const {id} = req.params; 
+        const {cid} = req.params; 
 
         try {
-            const remainingProducts = await cartsService.purchase(id, req.user.email)
+            const remainingProducts = await cartsService.purchase(cid, req.user.email)
            
             res.send({status:'success', payload: remainingProducts})
 

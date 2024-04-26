@@ -14,14 +14,13 @@ const purchaseCart = (cartId) => {
         method: "GET"
     }).then(res=>{
         if(res.status == 200){
+            alert("Compra finalizada!")
             window.location.reload();
         }
     })
 }
 
 const deleteFromCart = (cartId, productId) => {
-
-    console.log(cartId, productId)
 
     fetch(`/api/carts/${cartId}/products/${productId}`,{
         method: "DELETE"

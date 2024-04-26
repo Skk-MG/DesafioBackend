@@ -11,14 +11,18 @@
     <a href="/api/sessions/logout"><button class="btn">Cerrar Sesion</button></a>
 </div>
 
-<h2>Carrito</h2>
-{{#each cart.products}}
-    <p>{{product.description}} 
-        Cantidad {{this.quantity}} ${{this.product.price}}
-        <button class="btn" onclick="deleteFromCart('{{../user.cart}}','{{this.product._id}}')">Eliminar</button> 
-    </p>
-{{/each}}
-<button class="btn" onclick="purchaseCart('{{user.cart}}')">Finalizar Compra</button>
+<h2 class="title">Carrito</h2>
+<div class="productList carrito">
+    {{#if cart.products}}
+    {{#each cart.products}}
+        <p>{{product.description}} |
+            Cantidad {{this.quantity}} | ${{this.product.price}} |
+            <button class="btn" onclick="deleteFromCart('{{../user.cart}}','{{this.product._id}}')">Eliminar</button> 
+        </p>
+    {{/each}}
+    <button class="btn" onclick="purchaseCart('{{user.cart}}')">Finalizar Compra</button>
+    {{/if}}
+</div>
 
 <h1 class="title">Productos</h1>
 <div class="productListContainer">
