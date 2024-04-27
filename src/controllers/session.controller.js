@@ -1,6 +1,6 @@
 const UserDTO = require('../dao/DTOs/UserDTO');
 const UserModel = require('../dao/models/user.model');
-const { createHash, isValidPassword } = require('../utils');
+const { createHash, isValidPassword } = require('../utils/utils');
 
 class SessionController {
 
