@@ -1,5 +1,8 @@
 const ProductModel = require('../dao/models/product.model');
 const { productsService } = require('../repositories');
+const CustomError = require('../utils/errorHandling/customError');
+const ErrorTypes = require('../utils/errorHandling/errorTypes');
+const getProductErrorInfo = require('../utils/errorHandling/info');
 
 class ProductsController {
 
@@ -59,14 +62,21 @@ class ProductsController {
         }
     }
 
-    static async create(req, res) {
+    static async create(req, res, next) {
 
         try {
             const { title, description, price, thumbnails, code, stock, status, category } = req.body;
       
             if (!title || !description || !price || !code || !stock || !category) {
-                return res.status(400).send({ error: 'Todos los campos son obligatorios.' });
+                throw new CustomError({
+                    name: 'Error en la creacion del producto',
+                    cause: getProductErrorInfo({title, description, price, code, stock, category}),
+                    message: 'Error al crear el producto',
+                    code: ErrorTypes.INVALID_TYPE_ERROR,
+                    module: "products.controller.js"
+                })
             }
+            // return res.status(400).send({ error: 'Todos los campos son obligatorios.' });
     
             const newProduct = {
                 title,
@@ -79,7 +89,7 @@ class ProductsController {
                 category
             };
     
-            const addedProduct = await productsService.create(newProduct);
+            await productsService.create(newProduct);
             
             // const products = await manager.getProducts();
             // req.io.emit('list updated', {products: products});
@@ -88,7 +98,7 @@ class ProductsController {
             res.redirect('/realTimeProducts')
     
         } catch (error) {
-            res.status(400).send({ error: error.message });
+            next(error)
         }
     }
 

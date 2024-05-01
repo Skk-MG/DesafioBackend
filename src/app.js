@@ -14,6 +14,7 @@ const MessageModel = require('./dao/models/messages.model');
 const ProductManager = require("./dao/dbManagers/productsManager");
 const initializePassport = require("./config/passport.config");
 const { mongoConnectionLink, sessionSecret, port } = require("./config/config");
+const errorHandling = require("./middlewares/errorHandling.middleware");
 
 const manager = new ProductManager(__dirname + '/files/listaProductos.json');
 
@@ -94,3 +95,6 @@ app.use('/api/products', productsRouter);
 app.use('/api/carts', cartRouter);
 app.use('/api/sessions', sessionRouter);
 app.use('/', viewsRouter);
+
+// Error handling
+app.use(errorHandling);
