@@ -2,7 +2,8 @@ const ProductModel = require('../dao/models/product.model');
 const { productsService } = require('../repositories');
 const CustomError = require('../utils/errorHandling/customError');
 const ErrorTypes = require('../utils/errorHandling/errorTypes');
-const getProductErrorInfo = require('../utils/errorHandling/info');
+const { getProductErrorInfo, getIdErrorInfo } = require('../utils/errorHandling/info');
+
 
 class ProductsController {
 
@@ -49,16 +50,25 @@ class ProductsController {
         }
     }
 
-    static async getById(req, res) {
+    static async getById(req, res, next) {
 
-        const id = req.params.pid;
-    
         try {
+            const id = req.params.pid;
+
             const product = await productsService.getById(id);
+
+            if (!product) {
+                throw new CustomError({
+                    name: 'Error en la busqueda del producto',
+                    cause: getIdErrorInfo(id),
+                    message: 'Error al buscar el producto, ID inexistente o invalida',
+                    code: ErrorTypes.INVALID_PARAM_ERROR
+                })
+            }
+
             res.send(product);
-    
         } catch (error) {
-            res.status(404).send({ error: `No existe el id ${id}`});
+            next(error);
         }
     }
 
@@ -72,8 +82,7 @@ class ProductsController {
                     name: 'Error en la creacion del producto',
                     cause: getProductErrorInfo({title, description, price, code, stock, category}),
                     message: 'Error al crear el producto',
-                    code: ErrorTypes.INVALID_TYPE_ERROR,
-                    module: "products.controller.js"
+                    code: ErrorTypes.INVALID_TYPE_ERROR
                 })
             }
             // return res.status(400).send({ error: 'Todos los campos son obligatorios.' });
@@ -118,19 +127,27 @@ class ProductsController {
         }
     }
 
-    static async delete(req, res) {
-    
-        const id = req.params.pid;
-        
-        const deletedProduct = await productsService.getById(id);
+    static async delete(req, res, next) {
     
         try {
+            const id = req.params.pid;
+            
+            const deletedProduct = await productsService.getById(id);
+
+            if (!deletedProduct) {
+                throw new CustomError({
+                    name: 'Error en la busqueda del producto',
+                    cause: getIdErrorInfo(id),
+                    message: 'Error al buscar el producto, ID inexistente o invalida',
+                    code: ErrorTypes.INVALID_PARAM_ERROR
+                })
+            }
+    
             await productsService.delete(id);
             res.send({ status: 'success', deletedProduct });
     
         } catch (error) {
-            console.error("Error al eliminar el producto:", error);
-            res.status(500).send("Error interno del servidor");
+            next(error)
         }
     }
 }

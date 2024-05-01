@@ -10,4 +10,13 @@ const getProductErrorInfo = (product) => {
         `
 }
 
-module.exports = getProductErrorInfo;
+const getIdErrorInfo = (id) => {
+    return `La propiedad ID es inexistente, invalida o incompleta
+    *se recibio: ${id}
+    `
+}
+
+module.exports = {
+    getProductErrorInfo,
+    getIdErrorInfo
+};
