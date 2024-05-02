@@ -2,7 +2,7 @@ const ProductModel = require('../dao/models/product.model');
 const { productsService } = require('../repositories');
 const CustomError = require('../utils/errorHandling/customError');
 const ErrorTypes = require('../utils/errorHandling/errorTypes');
-const { getProductErrorInfo, getIdErrorInfo } = require('../utils/errorHandling/info');
+const { getProductErrorInfo } = require('../utils/errorHandling/info');
 
 
 class ProductsController {
@@ -56,15 +56,6 @@ class ProductsController {
             const id = req.params.pid;
 
             const product = await productsService.getById(id);
-
-            if (!product) {
-                throw new CustomError({
-                    name: 'Error en la busqueda del producto',
-                    cause: getIdErrorInfo(id),
-                    message: 'Error al buscar el producto, ID inexistente o invalida',
-                    code: ErrorTypes.INVALID_PARAM_ERROR
-                })
-            }
 
             res.send(product);
         } catch (error) {
@@ -127,27 +118,19 @@ class ProductsController {
         }
     }
 
-    static async delete(req, res, next) {
+    static async delete(req, res) {
+    
+        const id = req.params.pid;
+        
+        const deletedProduct = await productsService.getById(id);
     
         try {
-            const id = req.params.pid;
-            
-            const deletedProduct = await productsService.getById(id);
-
-            if (!deletedProduct) {
-                throw new CustomError({
-                    name: 'Error en la busqueda del producto',
-                    cause: getIdErrorInfo(id),
-                    message: 'Error al buscar el producto, ID inexistente o invalida',
-                    code: ErrorTypes.INVALID_PARAM_ERROR
-                })
-            }
-    
             await productsService.delete(id);
             res.send({ status: 'success', deletedProduct });
     
         } catch (error) {
-            next(error)
+            console.error("Error al eliminar el producto:", error);
+            res.status(500).send("Error interno del servidor");
         }
     }
 }

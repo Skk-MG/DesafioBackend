@@ -1,3 +1,7 @@
+const CustomError = require("../utils/errorHandling/customError");
+const ErrorTypes = require("../utils/errorHandling/errorTypes");
+const { getIdErrorInfo } = require("../utils/errorHandling/info");
+
 class CartsService {
 
     constructor(dao, productService, ticketService) {
@@ -12,12 +16,17 @@ class CartsService {
 
     async getById(id) {
 
-        const found = await this.dao.getById(id);
-
-        if(!found) {
-            return console.log("Error, carrito no encontrado");
-        } else {
-            return await this.dao.getById(id);
+        try {
+            const found = await this.dao.getById(id);
+            return found;     
+        } catch (error) {
+            
+            throw new CustomError({
+                name: 'Error en la busqueda del carrito',
+                cause: getIdErrorInfo(id),
+                message: 'Error al buscar el carrito, ID inexistente o invalida',
+                code: ErrorTypes.INVALID_PARAM_ERROR
+            })
         }
     }
 

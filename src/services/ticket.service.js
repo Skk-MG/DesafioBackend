@@ -1,3 +1,7 @@
+const CustomError = require("../utils/errorHandling/customError");
+const ErrorTypes = require("../utils/errorHandling/errorTypes");
+const { getIdErrorInfo } = require("../utils/errorHandling/info");
+
 class TicketService {
     constructor(dao){
         this.dao = dao;
@@ -8,9 +12,19 @@ class TicketService {
     }
 
     async getById(id){    
-        const ticket = await this.dao.getById(id); 
-        if(!ticket) throw { message:`Np hay un ticket con la ID ${id}`, status:400 }
-        return ticket;
+
+        try {
+            const ticket = await this.dao.getById(id); 
+            return ticket;  
+        } catch (error) {
+      
+            throw new CustomError({
+                name: 'Error en la busqueda del ticket',
+                cause: getIdErrorInfo(id),
+                message: 'Error al buscar el ticket, ID inexistente o invalida',
+                code: ErrorTypes.INVALID_PARAM_ERROR
+            })
+        }
     }
 
     async create(ticket){

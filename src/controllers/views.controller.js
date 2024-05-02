@@ -2,9 +2,6 @@ const ProductManager = require('../dao/dbManagers/productsManager');
 const ProductModel = require('../dao/models/product.model');
 const CartManager = require('../dao/dbManagers/cartManager');
 const generateProducts = require('../utils/generateProducts');
-const { getIdErrorInfo } = require('../utils/errorHandling/info');
-const CustomError = require('../utils/errorHandling/customError');
-const ErrorTypes = require('../utils/errorHandling/errorTypes');
 
 const manager = new ProductManager();
 const cartManager = new CartManager();
@@ -78,20 +75,11 @@ class ViewsController {
             const cartId = req.params.cid;
     
             const cart = await cartManager.getCartLean(cartId);
-
-            if (!cart) {
-                throw new CustomError({
-                    name: 'Error en la busqueda del carrito',
-                    cause: getIdErrorInfo(id),
-                    message: 'Error al buscar el carrito, ID inexistente o invalida',
-                    code: ErrorTypes.INVALID_PARAM_ERROR
-                })
-            }
     
             res.render('carts', cart)
             
         } catch (error) {
-            next(error)
+            res.send({status:'error', error: error.message})
         }
     };
 

@@ -1,7 +1,4 @@
 const { cartsService, productsService } = require("../repositories");
-const CustomError = require("../utils/errorHandling/customError");
-const ErrorTypes = require("../utils/errorHandling/errorTypes");
-const { getIdErrorInfo } = require("../utils/errorHandling/info");
 
 class CartController {
 
@@ -21,19 +18,11 @@ class CartController {
 
         try {
             const id = req.params.cid;
-    
-            const cart = await cartsService.getById(id);
 
-            if (!cart) {
-                throw new CustomError({
-                    name: 'Error en la busqueda del carrito',
-                    cause: getIdErrorInfo(id),
-                    message: 'Error al buscar el carrito, ID inexistente o invalida',
-                    code: ErrorTypes.INVALID_PARAM_ERROR
-                })
-            }
+            const cart = await cartsService.getById(id);
     
             res.send(cart);
+            
         } catch (error) {
             next(error)
         }
@@ -49,7 +38,7 @@ class CartController {
         }
     }
 
-    static async addProduct (req, res) {
+    static async addProduct (req, res, next) {
 
         try {
             const cartId = req.params.cid;
@@ -57,24 +46,6 @@ class CartController {
     
             const cart = await cartsService.getById(cartId);
             const product = await productsService.getById(productId);
-
-            if (!cart) {
-                throw new CustomError({
-                    name: 'Error en la busqueda del carrito',
-                    cause: getIdErrorInfo(id),
-                    message: 'Error al buscar el carrito, ID inexistente o invalida',
-                    code: ErrorTypes.INVALID_PARAM_ERROR
-                })
-            }
-
-            if (!product) {
-                throw new CustomError({
-                    name: 'Error en la busqueda del producto',
-                    cause: getIdErrorInfo(id),
-                    message: 'Error al buscar el producto, ID inexistente o invalida',
-                    code: ErrorTypes.INVALID_PARAM_ERROR
-                })
-            }
     
             if (product) {
                 await cartsService.addProduct(cartId, productId);
@@ -83,8 +54,7 @@ class CartController {
                 res.status(404).send({ error: `Producto con la ID ${productId} no encontrado` });
             }
         } catch (error) {
-            console.error("Error al agregar el producto al carrito:", error);
-            res.status(500).send("Error Interno del Server");
+            next(error)
         }
     }
 
@@ -132,22 +102,12 @@ class CartController {
         
         try {
             const cartId = req.params.cid;
-
-            if (!cartId) {
-                throw new CustomError({
-                    name: 'Error en la busqueda del carrito',
-                    cause: getIdErrorInfo(id),
-                    message: 'Error al buscar el carrito, ID inexistente o invalida',
-                    code: ErrorTypes.INVALID_PARAM_ERROR
-                })
-            }
     
             await cartsService.deleteAllProducts(cartId);
             res.send({ status: 'success' });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
-    
     }
 
     static async purchase(req, res){
