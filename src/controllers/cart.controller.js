@@ -119,7 +119,7 @@ class CartController {
             res.send({status:'success', payload: remainingProducts})
 
         } catch (error) {
-            console.log(error)
+            req.logger.error('La compra no se pudo realizar')
             return res.status(error.status || 500).send({status:'error', error:error.message})
         }
     }
