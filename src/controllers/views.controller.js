@@ -1,7 +1,6 @@
 const ProductManager = require('../dao/dbManagers/productsManager');
 const ProductModel = require('../dao/models/product.model');
 const CartManager = require('../dao/dbManagers/cartManager');
-const generateProducts = require('../utils/generateProducts');
 
 const manager = new ProductManager();
 const cartManager = new CartManager();
@@ -94,18 +93,6 @@ class ViewsController {
     static async resetPassword(req, res) {
         res.render('resetPassword', {});
     };
-
-    static async mockProducts(req, res) {
-
-        const quantity = req.query.quantity || 100;
-        const products = []
-
-        for (let i = 0; i < quantity; i++) {
-            products.push(generateProducts());
-        }
-
-        res.send({ status: 'success', payload: products});
-    }
 
 }
 

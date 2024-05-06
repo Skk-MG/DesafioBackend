@@ -16,6 +16,8 @@ const initializePassport = () => {
 
         let user = await UserModel.findOne({email: username})
 
+        req.logger.info(`Intento de logeo: Correo ${email}`)
+
         try {
 
             if(user) {
@@ -30,13 +32,14 @@ const initializePassport = () => {
                 email, 
                 age, 
                 password: createHash(password),
-                cart: cart._id,
+                cart: cart._id
             }
 
             const result = await UserModel.create(newUser)
 
             return done(null, result)
         } catch (error) {
+            req.logger.info('Usuario con ese correo ya existe')
             return done(error)
         }
     }))

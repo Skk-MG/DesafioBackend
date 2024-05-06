@@ -34,6 +34,4 @@ router.get('/login', publicAccess, ViewsController.login);
 
 router.get('/resetPassword', ViewsController.resetPassword);
 
-router.get('/mockingProducts', ViewsController.mockProducts);
-
 module.exports = router;

@@ -95,6 +95,8 @@ class ProductsController {
             // req.io.emit('list updated', {products: products});
       
             // res.send({ status: 'success'});
+            req.logger.info('Producto creado con exito')
+
             res.redirect('/realTimeProducts')
     
         } catch (error) {
@@ -110,6 +112,9 @@ class ProductsController {
     
         try {
             await productsService.update(id, updatedValues);
+
+            req.logger.info('Producto actualizado con exito')
+
             res.send({ status: 'success', updatedValues });
             
         } catch (error) {

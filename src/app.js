@@ -15,6 +15,9 @@ const ProductManager = require("./dao/dbManagers/productsManager");
 const initializePassport = require("./config/passport.config");
 const { mongoConnectionLink, sessionSecret, port } = require("./config/config");
 const errorHandling = require("./middlewares/errorHandling.middleware");
+const addLogger = require("./middlewares/addLogger.middleware");
+const { loggerRouter } = require("./routes/logger.router");
+const { mocksRouter } = require("./routes/mock.router");
 
 const manager = new ProductManager(__dirname + '/files/listaProductos.json');
 
@@ -39,6 +42,7 @@ app.set('view engine', 'handlebars');
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
+app.use(addLogger);
 
 // Public files
 app.use(express.static(`${__dirname}/public`));
@@ -94,6 +98,8 @@ io.on('connection', async (socket)=>{
 app.use('/api/products', productsRouter);
 app.use('/api/carts', cartRouter);
 app.use('/api/sessions', sessionRouter);
+app.use('/api/mocks', mocksRouter);
+app.use('/api/logger', loggerRouter);
 app.use('/', viewsRouter);
 
 // Error handling

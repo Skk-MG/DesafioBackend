@@ -1,15 +1,29 @@
 const UserDTO = require('../dao/DTOs/UserDTO');
 const UserModel = require('../dao/models/user.model');
+const CustomError = require('../utils/errorHandling/customError');
+const ErrorTypes = require('../utils/errorHandling/errorTypes');
 const { createHash, isValidPassword } = require('../utils/utils');
 
 class SessionController {
 
     static async registerUser (req, res) {
+        req.logger.info('Usuario creado con exito')
         res.send({status: 'success', message: 'Usuario Registrado'});
     }
     
-    static async getRegisterFailure (req, res) {
-        res.status(401).send({status: 'error', error: 'Error de autenticacion'});
+    static async getRegisterFailure (req, res, next) {
+        console.log('ERROR', req.error)
+        try {
+            throw new CustomError({
+                name: "Registro invalido",
+                cause: "Registracion invalida",
+                message: "Hubo un problema al registrar el usuario",
+                code: ErrorTypes.INVALID_TYPE_ERROR
+            })
+        } catch (error) {
+            next(next)
+        }
+        // res.status(401).send({status: 'error', error: 'Error de autenticacion'});
     }
 
     static async login (req, res) {
