@@ -26,4 +26,10 @@ router.get('/githubCallback', passport.authenticate('github',
 
 router.get('/current', SessionController.getCurrent);
 
+router.post('/resetPassword', SessionController.resetPassword);
+
+router.get('/changePassword/:passwordResetToken', SessionController.verifyToken)
+
+router.post('/changePassword', SessionController.changePassword);
+    
 module.exports = router;

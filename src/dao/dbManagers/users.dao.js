@@ -10,6 +10,13 @@ class UsersDao {
         return await UserModel.findOne({_id:id}).lean();
     }
 
+    async getByProperty(property, name){
+        let opts = {}
+        opts[property] = name; 
+        let result = await UserModel.findOne(opts).lean()
+        return result; 
+    }
+
     async create(user) {
         return await UserModel.create(user);
     }

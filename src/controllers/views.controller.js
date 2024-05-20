@@ -90,9 +90,21 @@ class ViewsController {
         res.render('login');
     };
 
-    static async resetPassword(req, res) {
-        res.render('resetPassword', {});
-    };
+    static getPasswordResetForm(req, res){
+        try{
+            res.render('resetPassword',{user: {}})
+        } catch (error) {
+            res.status(error.status || 500).send({status:'error', error: error.message})
+        }
+    }
+    
+    static getPasswordChangeForm(req, res){
+        try{
+            res.render('passwordChange',{user: {}})
+        } catch (error) {
+            res.status(error.status || 500).send({status:'error', error: error.message})
+        }
+    }
 
 }
 
