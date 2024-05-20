@@ -46,6 +46,10 @@ class CartController {
     
             const cart = await cartsService.getById(cartId);
             const product = await productsService.getById(productId);
+
+            if(req.user.role == 'premium' && product.owner == req.user.email) {
+                throw new Error('No puedes agregar ese producto porque te pertenece')
+            }
     
             if (product) {
                 await cartsService.addProduct(cartId, productId);

@@ -8,10 +8,10 @@ router.get('/', ProductsController.getProductList);
 
 router.get('/:pid', ProductsController.getById);
 
-router.post('/', checkRole('admin'), ProductsController.create);
+router.post('/', checkRole(['admin', 'premium']), ProductsController.create);
 
-router.put('/:pid', checkRole('admin'), ProductsController.update);
+router.put('/:pid', checkRole(['admin', 'premium']), ProductsController.update);
 
-router.delete('/:pid', checkRole('admin'), ProductsController.delete);
+router.delete('/:pid', checkRole(['admin', 'premium']), ProductsController.delete);
 
 module.exports = router;

@@ -66,7 +66,7 @@ class ProductsController {
     static async create(req, res, next) {
 
         try {
-            const { title, description, price, thumbnails, code, stock, status, category } = req.body;
+            const { title, description, price, thumbnails, code, stock, status, category, owner } = req.body;
       
             if (!title || !description || !price || !code || !stock || !category) {
                 throw new CustomError({
@@ -86,8 +86,13 @@ class ProductsController {
                 code,
                 stock,
                 status,
-                category
+                category,
+                owner
             };
+
+            if(req.user.role == 'premium') {
+                newProduct.owner = req.user.email
+            }
     
             await productsService.create(newProduct);
             
@@ -127,10 +132,15 @@ class ProductsController {
     
         const id = req.params.pid;
         
-        const deletedProduct = await productsService.getById(id);
-    
         try {
+            const deletedProduct = await productsService.getById(id);
+    
+            if(req.user.role == 'premium' && deletedProduct.owner != req.user.email) {
+                throw new Error('No puedes borrar ese producto')
+            }
+
             await productsService.delete(id);
+
             res.send({ status: 'success', deletedProduct });
     
         } catch (error) {

@@ -18,6 +18,7 @@ const errorHandling = require("./middlewares/errorHandling.middleware");
 const addLogger = require("./middlewares/addLogger.middleware");
 const { loggerRouter } = require("./routes/logger.router");
 const { mocksRouter } = require("./routes/mock.router");
+const { userRouter } = require("./routes/users.router");
 
 const manager = new ProductManager(__dirname + '/files/listaProductos.json');
 
@@ -100,6 +101,7 @@ app.use('/api/carts', cartRouter);
 app.use('/api/sessions', sessionRouter);
 app.use('/api/mocks', mocksRouter);
 app.use('/api/logger', loggerRouter);
+app.use('/api/users', userRouter);
 app.use('/', viewsRouter);
 
 // Error handling

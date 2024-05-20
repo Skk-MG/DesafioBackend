@@ -10,7 +10,7 @@ router.get('/:cid', CartController.getById);
 
 router.get('/', CartController.getList);
 
-router.post('/:cid/product/:pid', checkRole('usuario'), CartController.addProduct);
+router.post('/:cid/product/:pid', checkRole(['usuario', 'premium']), CartController.addProduct);
 
 router.delete('/:cid/products/:pid', CartController.deleteProduct);
 
