@@ -3,7 +3,9 @@ const handlebars = require('express-handlebars');
 const { Server } = require('socket.io');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
-const passport = require('passport')
+const passport = require('passport');
+const swaggerJsDoc = require('swagger-jsdoc');
+const swaggerUiExpress = require('swagger-ui-express');
 
 const productsRouter = require('./routes/products.router');
 const cartRouter = require('./routes/cart.router');
@@ -44,6 +46,21 @@ app.set('view engine', 'handlebars');
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(addLogger);
+
+// Swagger
+const swaggerOptions = {
+  definition: {
+    openapi: '3.0.1',
+    info: {
+      title: "Documentacion de mi Ecommerce",
+      description: "API pensada para practicar programacion de backend"
+    }
+  },
+  apis: [`${__dirname}/docs/**/*.yaml`]
+}
+
+const specs = swaggerJsDoc(swaggerOptions);
+app.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 
 // Public files
 app.use(express.static(`${__dirname}/public`));

@@ -1,0 +1,175 @@
+paths: 
+  /api/products: 
+    get: 
+      summary: Obtiene una lista de todos los productos disponibles
+      tags: [Producto]
+      responses: 
+        "200": 
+          description: Los productos fueron obtenidos de forma satisfactoria
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Producto'
+        "500":
+          description: Error en el servidor
+    post:
+      summary: Permite crear un nuevo producto
+      tags: [Producto]
+      requestBody: 
+        required: true
+        content: 
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/Producto'
+      responses: 
+        "200": 
+          description: El producto fue creado de forma satisfactoria
+        "500":
+          description: Error en el servidor
+  /api/products/{pid}:
+    get:
+      summary: Obtiene un solo producto de los disponibles, buscandolo por ID
+      tags: [Producto]
+      parameters: 
+      - name: pid
+        in: path
+        required: true
+        description: ID del producto que se quiere solicitar
+        schema: 
+          type: string
+          example: 65db92df855149a9a3133e07
+      responses: 
+        "200": 
+          description: El producto fue obtenido de forma satisfactoria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Producto'
+        "500":
+          description: Error en el servidor
+    put:
+      summary: Actualiza un solo producto, el producto es buscado por su ID
+      tags: [Producto]
+      parameters: 
+      - name: pid
+        in: path
+        required: true
+        description: ID del producto que se quiere actualizar
+        schema: 
+          type: string
+          example: 65db92df855149a9a3133e07
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/updateProduct'
+      responses: 
+        "200": 
+          description: El producto fue actualizado de forma satisfactoria
+        "500":
+          description: Error en el servidor
+    delete:
+      summary: Elimina un solo producto, el producto es buscado por su ID
+      tags: [Producto]
+      parameters: 
+      - name: pid
+        in: path
+        required: true
+        description: ID del producto que se quiere eliminar
+        schema: 
+          type: string
+          example: 65db92df855149a9a3133e07
+      responses: 
+        "200": 
+          description: El producto fue eliminado exitosamente
+        "500":
+          description: Error en el servidor
+components: 
+  schemas:
+    Producto: 
+      type: object
+      properties: 
+        _id: 
+          type: string
+          description: Id autogenerado por mongo
+        title: 
+          type: string
+          description: Nombre del producto
+        description:
+          type: string
+          description: Descripcion del producto
+        price:
+          type: number
+          description: Precio del producto
+        thumbnails:
+          type: array
+          items:
+            type: string
+          description: Array de imagenes que muestran el producto
+        code:
+          type: string
+          description: Codigo unico otorgado a cada producto
+        stock:
+          type: number
+          description: Unidades en stock del producto
+        status:
+          type: boolean
+          description: Status del producto, es true por default
+        category:
+          type: string
+          description: Categoria del producto
+        owner:
+          type: string
+          description: Dueño del producto, solo el admin y usuarios premium pueden ser dueños
+      example:
+        _id: "65db92df855149a9a3133e07"
+        title: "Celular"
+        description: "Un celular de gama media"
+        price: 100000
+        thumbnails: ["Link de imagen 1", "Link de imagen 2"]
+        code: "fgh456"
+        stock: 2
+        status: true
+        category: "Celular"
+        owner: "admin"
+  requestBodies:
+    updateProduct:
+      type: object
+      properties: 
+        title: 
+          type: string
+          description: Nombre del producto
+        description:
+          type: string
+          description: Descripcion del producto
+        price:
+          type: number
+          description: Precio del producto
+        thumbnails:
+          type: array
+          items:
+            type: string
+          description: Array de imagenes que muestran el producto
+        code:
+          type: string
+          description: Codigo unico otorgado a cada producto
+        stock:
+          type: number
+          description: Unidades en stock del producto
+        status:
+          type: boolean
+          description: Status del producto, es true por default
+        category:
+          type: string
+          description: Categoria del producto
+      example:
+        title: "Celular"
+        description: "Un celular de gama media"
+        price: 100000
+        thumbnails: ["Link de imagen 1", "Link de imagen 2"]
+        code: "fgh456"
+        stock: 2
+        status: true
+        category: "Celular"

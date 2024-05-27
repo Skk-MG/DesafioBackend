@@ -1,0 +1,274 @@
+paths: 
+  /api/carts: 
+    get: 
+      summary: Obtiene una lista de todos los carritos disponibles
+      tags: 
+        - Carrito
+      responses: 
+        "200": 
+          description: Los carritos fueron obtenidos de forma satisfactoria
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/CarritoConProductos'
+        "500":
+          description: Error en el servidor
+    post:
+      summary: Permite crear un nuevo carrito vacio
+      tags: 
+        - Carrito
+      requestBody: 
+        required: true
+        content: 
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/CarritoVacio'
+      responses: 
+        "200": 
+          description: El producto fue creado de forma satisfactoria
+        "500":
+          description: Error en el servidor
+  /api/carts/{cid}:
+    get:
+      summary: Obtiene un solo carrito de los disponibles, buscandolo por ID
+      tags: 
+        - Carrito
+      parameters: 
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito que se quiere solicitar
+          schema: 
+            type: string
+            example: 6626ea9b09bcba3a9ddf78ae
+      responses: 
+        "200": 
+          description: El carrito fue obtenido de forma satisfactoria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarritoConProductos'
+        "500":
+          description: Error en el servidor
+    put:
+      summary: Actualiza un solo carrito, el carrito es buscado por su ID
+      tags: 
+        - Carrito
+      parameters: 
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito que se quiere actualizar
+          schema: 
+            type: string
+            example: 6626ea9b09bcba3a9ddf78ae
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarritoConProductos'
+      responses: 
+        "200": 
+          description: El carrito fue actualizado de forma satisfactoria
+        "500":
+          description: Error en el servidor
+    delete:
+      summary: Elimina un solo carrito, el carrito es buscado por su ID
+      tags: 
+        - Carrito
+      parameters: 
+        - $ref: '#components/parameters/cid'
+      responses: 
+        "200": 
+          description: El carrito fue eliminado exitosamente
+        "500":
+          description: Error en el servidor
+  /api/carts/{cid}/product/{pid}:
+    post:
+      summary: Permite agregar un producto al carrito mediante su ID
+      tags: 
+        - Carrito
+      parameters: 
+        - $ref: '#components/parameters/cid'
+        - $ref: '#components/parameters/pid'
+      requestBody: 
+        required: true
+        content: 
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/CarritoConProductos'
+      responses: 
+        "200": 
+          description: El producto fue añadido de forma satisfactoria
+        "500":
+          description: Error en el servidor
+    delete:
+      summary: Elimina un producto del carrito, necesita la ID del carrito y el producto
+      tags: 
+        - Carrito
+      parameters: 
+        - $ref: '#components/parameters/cid'
+        - $ref: '#components/parameters/pid'
+      responses: 
+        "200": 
+          description: El producto fue eliminado exitosamente
+        "500":
+          description: Error en el servidor
+    put:
+      summary: Actualiza la cantidad de un producto dentro del carrito
+      tags: 
+        - Carrito
+      parameters: 
+        - $ref: '#components/parameters/cid'
+        - $ref: '#components/parameters/pid'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarritoConProductos'
+      responses: 
+        "200": 
+          description: La cantidad del producto fue actualizada correctamente
+        "500":
+          description: Error en el servidor
+  /api/carts/{cid}/purchase:
+    get: 
+      summary: Obtiene un ticket de orden de compra
+      tags: 
+        - Ticket
+      parameters: 
+        - $ref: '#components/parameters/tcid'
+      responses: 
+        "200": 
+          description: El ticket fue obtenido exitosamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Compra'
+        "500":
+          description: Error en el servidor
+components: 
+  parameters: 
+    cid:
+      name: cid
+      in: path
+      required: true
+      description: ID del carrito donde se encuentra el producto
+      schema: 
+        type: string
+        example: 6626ea9b09bcba3a9ddf78ae
+    tcid:
+      name: cid
+      in: path
+      required: true
+      description: ID del carrito del comprador
+      schema: 
+        type: string
+        example: 6626ea9b09bcba3a9ddf78ae
+    pid:
+      name: pid
+      in: path
+      required: true
+      description: ID del producto cuya cantidad se quiere actualizar
+      schema: 
+        type: string
+        example: 65db92df855149a9a3133e07
+  schemas: 
+    CarritoVacio: 
+      type: object
+      properties: 
+        products: 
+          type: array
+          items:
+            type: object
+            properties: 
+              product: 
+                type: string
+              quantity: 
+                type: number
+          default: []
+    CarritoConProductos: 
+      type: object
+      properties: 
+        products: 
+          type: array
+          items:
+            type: object
+            properties: 
+              product: 
+                $ref: '#/components/schemas/Producto'
+              quantity: 
+                type: number
+          default: []
+    Producto: 
+      type: object
+      properties: 
+        _id: 
+          type: string
+          description: Id autogenerado por mongo
+        title: 
+          type: string
+          description: Nombre del producto
+        description:
+          type: string
+          description: Descripcion del producto
+        price:
+          type: number
+          description: Precio del producto
+        thumbnails:
+          type: array
+          items:
+            type: string
+          description: Array de imagenes que muestran el producto
+        code:
+          type: string
+          description: Codigo unico otorgado a cada producto
+        stock:
+          type: number
+          description: Unidades en stock del producto
+        status:
+          type: boolean
+          description: Status del producto, es true por default
+        category:
+          type: string
+          description: Categoria del producto
+        owner:
+          type: string
+          description: Dueño del producto, solo el admin y usuarios premium pueden ser dueños
+      example:
+        _id: "65db92df855149a9a3133e07"
+        title: "Celular"
+        description: "Un celular de gama media"
+        price: 100000
+        thumbnails: 
+          - "Link de imagen 1"
+          - "Link de imagen 2"
+        code: "fgh456"
+        stock: 2
+        status: true
+        category: "Celular"
+        owner: "admin"
+    Compra:
+          type: object
+          properties:
+            code:
+              type: string
+              description: Codigo de la compra
+            purchase_datetime:
+              type: string
+              description: Fecha de la compra
+            amount:
+              type: number
+              description: Total de la compra
+            purchaser:
+              type: string
+              description: Correo del comprador
+          example:
+            code: "7ca0c948-79de-433d-82ef-a6e66f1385c6"
+            purchase_datetime: "22/5/2024, 17:52:07"
+            amount: 1000
+            purchaser: "purchaser@gmail.com"
