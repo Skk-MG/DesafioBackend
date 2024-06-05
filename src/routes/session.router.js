@@ -16,8 +16,6 @@ router.get('/loginFailure', SessionController.getLoginFailure);
 
 router.get('/logout', SessionController.logout);
 
-router.post('/resetPassword', SessionController.resetPassword);
-
 router.get('/github', passport.authenticate('github', 
     {scope: ['user:email']}), async (req, res) => {});
 

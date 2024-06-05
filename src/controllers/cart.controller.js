@@ -32,7 +32,7 @@ class CartController {
 
         try {
             const cart = await cartsService.getAll();
-            res.send(cart);
+            res.send({status: 'success', payload: cart});
         } catch (error) {
             res.status(404).send({ error: 'No se pudo leer el archivo'});
         }
