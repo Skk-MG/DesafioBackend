@@ -43,6 +43,8 @@ class SessionController {
             role: user.role,
             cart: user.cart
         }
+
+        await usersService.setLastConnection(user._id)
        
         res.send({status: 'success', payload: req.session.user});
     }

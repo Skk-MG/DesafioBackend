@@ -16,6 +16,21 @@ const userSchema = new mongoose.Schema({
     role: {
         type: String,
         default: 'usuario'
+    },
+    documents: {
+        type: [{
+            name: String,
+            reference: String
+        }],
+        default: []
+    },
+    last_connection: {
+        type: String,
+        default: null
+    },
+    profile_picture: {
+        type: String,
+        default: ""
     }
 })
 
