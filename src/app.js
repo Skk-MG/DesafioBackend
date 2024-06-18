@@ -6,6 +6,7 @@ const MongoStore = require('connect-mongo');
 const passport = require('passport');
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUiExpress = require('swagger-ui-express');
+const nodemailer = require('nodemailer');
 
 const productsRouter = require('./routes/products.router');
 const cartRouter = require('./routes/cart.router');
@@ -15,7 +16,7 @@ const viewsRouter = require('./routes/views.router');
 const MessageModel = require('./dao/models/messages.model');
 const ProductManager = require("./dao/dbManagers/productsManager");
 const initializePassport = require("./config/passport.config");
-const { mongoConnectionLink, sessionSecret, port } = require("./config/config");
+const { mongoConnectionLink, sessionSecret, port, mailing } = require("./config/config");
 const errorHandling = require("./middlewares/errorHandling.middleware");
 const addLogger = require("./middlewares/addLogger.middleware");
 const { loggerRouter } = require("./routes/logger.router");
@@ -25,6 +26,15 @@ const { userRouter } = require("./routes/users.router");
 const manager = new ProductManager(__dirname + '/files/listaProductos.json');
 
 const app = express();
+
+const transport = nodemailer.createTransport({
+  service: mailing.service,
+  port: mailing.port,
+  auth: {
+    user: mailing.auth.user,
+    pass: mailing.auth.pass
+  }
+})
 
 // Session Setting
 app.use(session({
