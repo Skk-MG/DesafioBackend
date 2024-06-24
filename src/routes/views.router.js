@@ -36,4 +36,6 @@ router.get('/resetPassword', ViewsController.getPasswordResetForm);
 
 router.get('/changePassword', ViewsController.getPasswordChangeForm)
 
+router.get('/usersManager', checkRole(['admin']), ViewsController.getUsersManager)
+
 module.exports = router;

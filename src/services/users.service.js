@@ -1,3 +1,9 @@
+const MailingService = require("./mailing.service");
+
+const mailingService = new MailingService();
+
+const TOLERABLE_TIME = 60 * 24 * 2;
+
 class UsersService {
 
     constructor(dao) {
@@ -51,7 +57,7 @@ class UsersService {
 
     async setLastConnection(id){
         const user = await this.dao.getById(id);
-        await this.update(id, {last_connection: new Date().toLocaleString()})
+        await this.update(id, {last_connection: new Date()})
     }
 
     async addDocuments(id, files){
@@ -68,6 +74,31 @@ class UsersService {
     async addProfilePicture(id, file){
         await this.getById(id);
         return await this.update(id, {profile_picture: file.path.split('public')[1].replace(/\\/g,'/')})
+    }
+
+    async deleteInactiveUsers() {
+        const users = await this.getAll();
+        const now = new Date();
+        let deletedCount = 0;
+
+        for(const user of users){
+            if(user.last_connection){
+                if(this.getMinutesDifference(now, user.last_connection) > TOLERABLE_TIME){
+                    await this.delete(user._id);
+                    await mailingService.sendDeletedAccountMail(user.firstName, user.email)
+                    deletedCount++;
+                }
+            }
+        }
+
+        return deletedCount;
+    }
+
+    getMinutesDifference(now, last_connection){
+        let milisecondsDif = now - last_connection
+        let minutes =  Math.round((milisecondsDif/1000)/60)
+
+        return minutes; 
     }
 }
 

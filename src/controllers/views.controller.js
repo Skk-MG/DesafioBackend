@@ -1,6 +1,7 @@
 const ProductManager = require('../dao/dbManagers/productsManager');
 const ProductModel = require('../dao/models/product.model');
 const CartManager = require('../dao/dbManagers/cartManager');
+const { usersService } = require('../repositories');
 
 const manager = new ProductManager();
 const cartManager = new CartManager();
@@ -101,6 +102,21 @@ class ViewsController {
     static getPasswordChangeForm(req, res){
         try{
             res.render('passwordChange',{user: {}})
+        } catch (error) {
+            res.status(error.status || 500).send({status:'error', error: error.message})
+        }
+    }
+
+    static async getUsersManager(req, res){
+        try{
+            const users = await usersService.getAll();
+            const usersWithRoleFlags = users.map(user=>{
+                user.isUser = user.role == 'user'
+                user.isPremium = user.role == 'premium'
+                user.isAdmin = user.role == 'admin'
+                return user;
+            })
+            res.render('usersManager',{users: users})
         } catch (error) {
             res.status(error.status || 500).send({status:'error', error: error.message})
         }

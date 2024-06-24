@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema({
         default: []
     },
     last_connection: {
-        type: String,
+        type: Date,
         default: null
     },
     profile_picture: {

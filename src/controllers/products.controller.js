@@ -1,9 +1,11 @@
 const ProductModel = require('../dao/models/product.model');
 const { productsService } = require('../repositories');
+const MailingService = require('../services/mailing.service');
 const CustomError = require('../utils/errorHandling/customError');
 const ErrorTypes = require('../utils/errorHandling/errorTypes');
 const { getProductErrorInfo } = require('../utils/errorHandling/info');
 
+const mailingService = new MailingService();
 
 class ProductsController {
 
@@ -137,6 +139,10 @@ class ProductsController {
     
             if(req.user.role == 'premium' && deletedProduct.owner != req.user.email) {
                 throw new Error('No puedes borrar ese producto')
+            }
+
+            if(deletedProduct.owner && deletedProduct.owner != "admin"){
+                await mailingService.sendDeletedPremiumProductMail(deletedProduct.owner, deletedProduct.description)
             }
 
             await productsService.delete(id);
