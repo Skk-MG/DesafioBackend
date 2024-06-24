@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha src/test --recursive",
-    "dev": "nodemon src/app -p MONGO"
+    "start": "node src/app -p MONGO"
   },
   "keywords": [],
   "author": "",
