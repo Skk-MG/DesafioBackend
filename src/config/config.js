@@ -13,7 +13,7 @@ module.exports = {
     mongoConnectionLink: process.env.MONGO_CONNECTION_LINK,
     sessionSecret: process.env.SESSION_SECRET,
     jwtSecret: process.env.JWT_SECRET,
-    port: process.env.PORT_CONNECTION,
+    port: process.env.PORT || 8080,
     persistence: options.persistence,
     mailing: {
         service: process.env.MAIL_SERVICE,
