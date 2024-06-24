@@ -1,6 +1,6 @@
-<h1 class="title">Carrito {{_id}}</h1>
+<h1 class="title">Tu Carrito: {{user.cart}}</h1>
 
-{{#each products}}
+{{#each cart.products}}
     <div class="productList">
         <h2>{{this.product.description}}</h2>
         <p>Categoria: {{this.product.category}}</p>
@@ -8,3 +8,7 @@
     </div>
     <br><br>
 {{/each}}
+
+<button class="btn" style="margin: 1rem;" onclick="purchaseCart('{{user.cart}}')">Confirmar Compra</button>
+
+<script src="/js/products.js"></script>

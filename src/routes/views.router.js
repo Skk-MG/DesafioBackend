@@ -38,4 +38,6 @@ router.get('/changePassword', ViewsController.getPasswordChangeForm)
 
 router.get('/usersManager', checkRole(['admin']), ViewsController.getUsersManager)
 
+router.get('/purchaseSuccess', ViewsController.getPurchaseSuccess)
+
 module.exports = router;

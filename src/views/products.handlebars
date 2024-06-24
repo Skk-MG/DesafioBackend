@@ -20,7 +20,7 @@
             <button class="btn" onclick="deleteFromCart('{{../user.cart}}','{{this.product._id}}')">Eliminar</button> 
         </p>
     {{/each}}
-    <button class="btn" onclick="purchaseCart('{{user.cart}}')">Finalizar Compra</button>
+    <a href="/carts/{{user.cart}}"><button class="btn">Finalizar Compra</button></a>
     {{/if}}
 </div>
 

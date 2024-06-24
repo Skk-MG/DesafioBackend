@@ -76,7 +76,7 @@ class ViewsController {
     
             const cart = await cartManager.getCartLean(cartId);
     
-            res.render('carts', cart)
+            res.render('carts', {cart, user: req.session.user})
             
         } catch (error) {
             res.send({status:'error', error: error.message})
@@ -117,6 +117,14 @@ class ViewsController {
                 return user;
             })
             res.render('usersManager',{users: users})
+        } catch (error) {
+            res.status(error.status || 500).send({status:'error', error: error.message})
+        }
+    }
+
+    static getPurchaseSuccess(req, res){
+        try{
+            res.render('purchaseSuccess')
         } catch (error) {
             res.status(error.status || 500).send({status:'error', error: error.message})
         }

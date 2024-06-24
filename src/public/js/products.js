@@ -14,8 +14,8 @@ const purchaseCart = (cartId) => {
         method: "GET"
     }).then(res=>{
         if(res.status == 200){
-            alert("Compra finalizada!")
-            window.location.reload();
+            // window.location.reload();
+            window.location.href = '/purchaseSuccess'
         }
     })
 }
